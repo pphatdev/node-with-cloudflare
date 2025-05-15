@@ -6,7 +6,7 @@
 		"deploy": "wrangler deploy",
 		"dev": "wrangler dev",
 		"start": "wrangler dev",
-		"build": "wrangler deploy --dry-run"
+		"build": "npm run deploy"
 	},
 	"devDependencies": {
 		"wrangler": "^4.14.4"
