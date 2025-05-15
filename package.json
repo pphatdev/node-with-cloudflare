@@ -9,5 +9,8 @@
 	},
 	"devDependencies": {
 		"wrangler": "^4.14.4"
+	},
+	"dependencies": {
+		"drizzle-orm": "^0.43.1"
 	}
 }

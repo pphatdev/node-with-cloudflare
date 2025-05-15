@@ -1,7 +1,7 @@
 name = "hello-pphat"
-main = "src/worker.js"
+main = "src/index.js"
 workers_dev = true
 compatibility_date = "2025-05-15"
 
-[observability]
+[unsafe.metadata.observability]
 enabled = true
