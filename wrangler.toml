@@ -1,6 +1,6 @@
-name = "hello-pphat"
+name = "pphat-api"
 main = "src/index.js"
-workers_dev = true
+workers_dev = false
 compatibility_date = "2025-05-15"
 
 [unsafe.metadata.observability]
