@@ -1,7 +1,7 @@
 {
     "$schema": "node_modules/wrangler/config-schema.json",
-    "name": "hello-pphat",
-    "main": "src/index.js",
+    "name": "test",
+    "main": "src/index.ts",
     "compatibility_date": "2025-04-18",
     "observability": {
         "enabled": true
@@ -9,8 +9,8 @@
     "d1_databases": [
         {
             "binding": "DB",
-            "database_name": "test",
-            "database_id": "2d1069f4-f8ef-4f1f-a430-3861d78951d2"
+            "database_name": "pphat",
+            "database_id": "effc222b-f49a-42ea-8beb-cbaab0cf19ec"
         }
     ]
 }
