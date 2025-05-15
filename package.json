@@ -5,8 +5,7 @@
 	"scripts": {
 		"deploy": "wrangler deploy",
 		"dev": "wrangler dev",
-		"start": "wrangler dev",
-		"build": "node build.js"
+		"start": "wrangler dev"
 	},
 	"devDependencies": {
 		"wrangler": "^4.14.4"
