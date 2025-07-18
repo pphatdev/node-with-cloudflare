@@ -1,5 +1,5 @@
 name = "pphat-api"
-main = "src/index.js"
+main = "src/routes/index.js"
 workers_dev = false
 compatibility_date = "2025-05-15"
 

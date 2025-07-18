@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
-import WebRoutes from './routes/web';
-import ApiRoutes from './routes/api';
+import WebRoutes from './v1/web/web';
+import ApiRoutes from './v1/api/api';
 
 const app = new Hono();
 app.route('/', WebRoutes);
