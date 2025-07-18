@@ -1,16 +1,17 @@
 import { Hono } from 'hono';
-import UserRoutes from './users';
+import Projects from './projects';
+import { initialize } from '../../../db/setup';
+import drizzleMiddleware from '../../../middlewares/drizzle';
 
 const app = new Hono().basePath('/api');
+
+app.use('*', drizzleMiddleware);
+app.post('/setup', initialize)
 
 app.get('/', (c) => {
     return c.json({ message: 'Welcome to the API homepage' });
 });
 
-app.route('/users', UserRoutes);
-
-app.get('/status', (c) => {
-    return c.json({ status: 'API is running' });
-});
+app.route('/projects', Projects);
 
 export default app;
