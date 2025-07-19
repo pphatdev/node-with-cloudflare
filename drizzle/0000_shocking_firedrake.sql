@@ -1,5 +1,5 @@
 CREATE TABLE `projects` (
-	`id` text PRIMARY KEY NOT NULL,
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text(255) NOT NULL,
 	`description` text,
 	`image` text(255),
