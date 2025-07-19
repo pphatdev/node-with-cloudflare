@@ -6,8 +6,7 @@ interface Success {
     data: Array<Object> | Object;
 }
 
-interface Error extends Omit<Success, 'data'> {}
-
+interface Error extends Omit<Success, 'data'> { }
 interface PaginatedResponse extends Success { total: number; }
 
 interface ResponseHandler {
@@ -18,7 +17,7 @@ interface ResponseHandler {
 export class Response implements ResponseHandler {
     static readonly VERSION = "v1";
 
-    success(data: Array<Object> | Object, status = 200, message = "Request was successful"): Success {
+    success(data: Array<Object> | Object,  status: number = 200, message = "Request was successful"): Success {
         return {
             status,
             version: Response.VERSION,
@@ -28,7 +27,7 @@ export class Response implements ResponseHandler {
         };
     }
 
-    error(message: string | string[], status = 400): Error {
+    error(message: string | string[], status: number = 400): Error {
         return {
             status,
             success: false,
@@ -37,7 +36,7 @@ export class Response implements ResponseHandler {
         };
     }
 
-    paginate(data: Array<Object> | Object, total: number, status = 200, message = "Request was successful"): PaginatedResponse {
+    paginate(data: Array<Object> | Object, total: number, status: number = 200, message = "Request was successful"): PaginatedResponse {
         return {
             status,
             version: Response.VERSION,
