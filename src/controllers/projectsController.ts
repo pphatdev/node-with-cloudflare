@@ -2,7 +2,7 @@ import { Context } from "hono";
 import { Response } from "../libs/utils/response";
 import { projects } from "../db/projects";
 import { z } from "zod";
-import { like } from "drizzle-orm";
+import { like, sql } from "drizzle-orm";
 import { getTotal } from "../libs/utils";
 
 const response = new Response();
@@ -32,7 +32,6 @@ interface Project {
     languages: string[];
     [key: string]: any;
 }
-
 
 class ProjectsController {
 
@@ -75,7 +74,6 @@ class ProjectsController {
         await next();
     }
 
-
     static async getProjects(c: Context): Promise<any> {
         try {
             const params = c.get("validatedParams");
@@ -116,6 +114,7 @@ class ProjectsController {
         }
     }
 
+
     static async createProject(c: Context): Promise<any> {
         try {
             const params = c.get("validated");
@@ -134,12 +133,35 @@ class ProjectsController {
         }
     }
 
+
+    static async deleteProject(c: Context): Promise<any> {
+        try {
+            const db = c.get("db");
+            const id = c.get("id");
+            const { success } = await db
+                .update(projects)
+                .set({ status: 0, is_deleted: 1 })
+                .where(sql`${projects.id} = ${id}`)
+                .run();
+
+            if (!success) {
+                return c.json(response.error("Failed to delete project", 500), 500);
+            }
+
+            return c.json(response.success({}, 200, "Project deleted successfully"), 200);
+
+        } catch (error) {
+            console.error("Error in deleteProject:", error);
+            return c.json(response.error("Failed to delete project", 500), 500);
+        }
+    }
 }
 
 export const {
     getProjects,
     createProject,
-    createValidation
+    createValidation,
+    deleteProject,
 } = ProjectsController;
 
 export default ProjectsController;
