@@ -23,6 +23,8 @@ export class Validation {
             limit: params.limit ? Number(params.limit) : undefined,
             sort: params.sort,
             search: params.search,
+            status: params.status === undefined ? true : params.status === "true",
+            is_deleted: params.is_deleted === undefined ? false : params.is_deleted === "true",
         };
 
         const schema = z.object({
@@ -30,6 +32,8 @@ export class Validation {
             limit: z.number().min(1).max(200).optional(),
             sort: z.string().optional(),
             search: z.string().optional(),
+            status: z.boolean().optional(),
+            is_deleted: z.boolean().optional(),
         });
 
         // @ts-ignore
