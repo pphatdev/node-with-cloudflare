@@ -1,10 +1,6 @@
 import 'dotenv/config';
 import { defineConfig } from 'drizzle-kit';
 
-export const CLOUDFLARE_ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID;
-export const CLOUDFLARE_DATABASE_ID = process.env.CLOUDFLARE_DATABASE_ID;
-export const CLOUDFLARE_D1_TOKEN = process.env.CLOUDFLARE_D1_TOKEN;
-
 export default defineConfig({
     out: './drizzle',
     schema: './src/db/schema.ts',

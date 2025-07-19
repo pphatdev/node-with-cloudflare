@@ -4,10 +4,13 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"env:process": "SET .env = $(cat .env)",
 		"deploy": "wrangler deploy",
 		"dev": "wrangler dev",
-		"start": "wrangler dev"
+		"start": "wrangler dev",
+		"generate": "drizzle-kit generate",
+		"migrate": "drizzle-kit migrate",
+		"push": "drizzle-kit push",
+		"pull": "drizzle-kit pull"
 	},
 	"devDependencies": {
 		"@types/node": "^24.0.14",
