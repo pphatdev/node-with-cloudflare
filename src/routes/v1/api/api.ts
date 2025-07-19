@@ -6,12 +6,7 @@ import drizzleMiddleware from '../../../middlewares/drizzle';
 const app = new Hono().basePath('/api');
 
 app.use('*', drizzleMiddleware);
-app.post('/setup', initialize)
-
-app.get('/', (c) => {
-    return c.json({ message: 'Welcome to the API homepage' });
-});
-
+app.post('/setup', initialize);
 app.route('/projects', Projects);
 
 export default app;
