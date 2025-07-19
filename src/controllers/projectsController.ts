@@ -5,6 +5,33 @@ import { z } from "zod";
 
 const response = new Response();
 
+interface ProjectDbRow {
+    id: number;
+    name: string;
+    description: string;
+    image: string;
+    published: boolean;
+    tags: string | string[];
+    source: string;
+    authors: string | string[];
+    languages: string | string[];
+    [key: string]: any;
+}
+
+interface Project {
+    id: number;
+    name: string;
+    description: string;
+    image: string;
+    published: boolean;
+    tags: string[];
+    source: string;
+    authors: string[];
+    languages: string[];
+    [key: string]: any;
+}
+
+
 class ProjectsController {
 
     static createValidation = async (c: Context, next: () => Promise<void>): Promise<void> => {
@@ -55,7 +82,12 @@ class ProjectsController {
     static async getProjects(c: Context): Promise<any> {
         try {
             const db = c.get("db");
-            const result = await db.select().from(projects).all();
+            const result: Project[] = (await db.select().from(projects).all() as ProjectDbRow[]).map((project: ProjectDbRow): Project => ({
+                ...project,
+                tags: Array.isArray(project.tags) ? project.tags : JSON.parse(project.tags || "[]"),
+                authors: Array.isArray(project.authors) ? project.authors : JSON.parse(project.authors || "[]"),
+                languages: Array.isArray(project.languages) ? project.languages : JSON.parse(project.languages || "[]"),
+            }));
             return c.json(response.success(result, 200, "Projects fetched successfully"));
         } catch (error) {
             console.error("Error in getProjects:", error);

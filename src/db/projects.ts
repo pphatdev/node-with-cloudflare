@@ -1,6 +1,6 @@
 import { sqliteTable, text, int } from "drizzle-orm/sqlite-core";
 
-export const projects = sqliteTable("projects", {
+const projectColumns = {
     id: int("id").primaryKey({ autoIncrement: true }).notNull(),
     name: text("name", { length: 255 }).notNull(),
     description: text("description"),
@@ -14,7 +14,9 @@ export const projects = sqliteTable("projects", {
     status: int("status").notNull().default(1),
     created_date: text("created_date").notNull().default("CURRENT_TIMESTAMP"),
     updated_date: text("updated_date").default("CURRENT_TIMESTAMP"),
-});
+}
+
+export const projects = sqliteTable("projects", projectColumns);
 
 // create new table if it does not exist
 export const createProjectsTableQuery = `
