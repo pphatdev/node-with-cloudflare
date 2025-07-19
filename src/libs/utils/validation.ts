@@ -4,7 +4,6 @@ import { Response } from "./response";
 
 const response = new Response();
 
-
 export class Validation {
 
     /**
@@ -43,6 +42,7 @@ export class Validation {
             return c.json(response.error([errors], 400));
         }
 
+        c.set("validatedParams", validatedParams);
         await next();
     }
 }
