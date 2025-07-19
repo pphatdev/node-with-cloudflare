@@ -15,7 +15,7 @@ app.get("/", Validation.list, getProjects);
 /**
  * Creates a new project.
  * @route POST /api/projects
- * @param { name: string, description: string, image: string, published: boolean, tags: string[], source: string, authors: string[], languages: string[] }
+ * @param { name: string, description: string, image: string, published: boolean, tags: string[], source: string[], authors: string[], languages: string[] }
  */
 app.post("/", createValidation, createProject);
 

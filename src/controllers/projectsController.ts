@@ -2,7 +2,7 @@ import { Context } from "hono";
 import { Response } from "../libs/utils/response";
 import { projects } from "../db/projects";
 import { z } from "zod";
-import { like, sql } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 import { getTotal } from "../libs/utils";
 
 const response = new Response();
@@ -53,7 +53,7 @@ class ProjectsController {
             image: z.string().url(),
             published: z.boolean(),
             tags: z.array(z.string().min(2).max(100)),
-            source: z.string().url(),
+            source: z.array(z.string().min(2).max(100)),
             authors: z.array(z.string().min(2).max(100)),
             languages: z.array(z.string().min(2).max(100))
         });
@@ -64,12 +64,14 @@ class ProjectsController {
         if (!success) {
             // @ts-ignore
             return c.json(response.error([Array.from(error.errors).map(err => {
+                // @ts-ignore
                 return { field: err.path.join("."), message: err.message, type: err.code };
             })], 400));
         }
         c.set("validated", {
             ...params,
             tags: JSON.stringify(params.tags),
+            source: JSON.stringify(params.source),
             authors: JSON.stringify(params.authors),
             languages: JSON.stringify(params.languages),
         });
@@ -106,6 +108,7 @@ class ProjectsController {
             const data: Project[] = results.map((row: ProjectDbRow) => ({
                 ...row,
                 tags: Array.isArray(row.tags) ? row.tags : JSON.parse(row.tags || "[]"),
+                source: Array.isArray(row.source) ? row.source : JSON.parse(row.source || "[]"),
                 authors: Array.isArray(row.authors) ? row.authors : JSON.parse(row.authors || "[]"),
                 languages: Array.isArray(row.languages) ? row.languages : JSON.parse(row.languages || "[]"),
             }));
