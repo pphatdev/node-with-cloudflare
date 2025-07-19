@@ -42,7 +42,9 @@ class ProjectsController {
         */
         const params = {
             ...await c.req.parseBody(),
-            ...await c.req.raw.json()
+            ...await c.req.raw.json(),
+            created_date: new Date().toISOString(),
+            updated_date: new Date().toISOString(),
         };
 
         const schema = z.object({
