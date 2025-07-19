@@ -45,4 +45,29 @@ export class Validation {
         c.set("validatedParams", validatedParams);
         await next();
     }
+
+    static delete = async (c: Context, next: () => Promise<void>): Promise<void> => {
+        const params = c.req.param();
+
+        const validatedParams = {
+            id: params.id ? Number(params.id) : undefined,
+        };
+
+        const schema = z.object({
+            id: z.number().min(1),
+        });
+
+        // @ts-ignore
+        const { success, error } = schema.safeParse(validatedParams);
+
+        if (!success) {
+            // @ts-ignore
+            return c.json(response.error([Array.from(error.errors).map(err => {
+                return { field: err.path.join("."), message: err.message, type: err.code };
+            })], 400));
+        }
+
+        c.set("validatedParams", params);
+        await next();
+    }
 }
