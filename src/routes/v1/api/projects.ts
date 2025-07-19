@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { createProject, createValidation, getProjects } from "../../../controllers/projectsController";
+import { createProject, createValidation, getProjects, deleteProject } from "../../../controllers/projectsController";
 import { Validation } from "../../../libs/utils/validation";
 
 const app = new Hono();
@@ -18,5 +18,13 @@ app.get("/", Validation.list, getProjects);
  * @param { name: string, description: string, image: string, published: boolean, tags: string[], source: string, authors: string[], languages: string[] }
  */
 app.post("/", createValidation, createProject);
+
+
+/**
+ * Deletes a project by ID.
+ * @route DELETE /api/projects/:id
+ * @param { id: number }
+*/
+app.delete("/:id", Validation.delete, deleteProject)
 
 export default app;
