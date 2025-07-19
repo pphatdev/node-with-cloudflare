@@ -77,18 +77,20 @@ class ProjectsController {
     static async getProjects(c: Context): Promise<any> {
         try {
             const params = c.get("validatedParams");
-            const { page = 1, limit = 10, sort = "id", search = "" } = params;
+            const { page = 1, limit = 10, sort = "id", search = "", status = true, is_deleted } = params;
 
             const offset = (page - 1) * limit;
             const db = c.get("db");
 
+            const where = sql`${projects.status} = ${status ? 1 : 0} AND ${projects.is_deleted} = ${is_deleted ? 1 : 0} AND ${projects.name} LIKE ${`%${search}%`}`;
+
             // Get total count
-            const total = await getTotal(c, projects, search);
+            const total = await getTotal(c, projects, where);
 
             // Get paginated results
             const query = db.select()
                 .from(projects)
-                .where(like(projects.name, `%${search}%`))
+                .where(where)
                 .orderBy(projects[sort])
                 .limit(limit)
                 .offset(offset);
