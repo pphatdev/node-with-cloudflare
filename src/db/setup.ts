@@ -5,19 +5,14 @@ import { createProjectsTableQuery } from "./projects";
 
 const response = new Response();
 
-// Define schema
-const InitSchema = z.object({
-    // db: z.string().min(1, "Database name is required")
-});
+let tables = [];
 
 export const initialize = async (c: Context) => {
     try {
         const body = await c.req.parseBody();
-        const result = InitSchema.safeParse(body);
-
-        const tables = [
-            createProjectsTableQuery
-        ];
+        const result = z.object({
+            // db: z.string().min(1, "Database name is required")
+        }).safeParse(body);
 
         if (!result.success) {
             // @ts-ignore
@@ -27,12 +22,16 @@ export const initialize = async (c: Context) => {
         }
 
         const db = await c.get("db");
-        const res = await db.run(createProjectsTableQuery);
-        if (res) {
-            tables.push("projects");
+        const { success, meta } = await db.run(createProjectsTableQuery);
+
+        if (success) {
+            tables.push({
+                table_name: "projects",
+                meta: meta
+            });
         }
 
-        return c.json(response.success({ tables }, 200, "Database initialized successfully"));
+        return c.json(response.success(tables, 200, "Database initialized successfully"));
     } catch (error) {
         console.error("Failed to initialize database:", error);
         throw new Error("Database initialization failed");
