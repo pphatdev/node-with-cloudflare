@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { createProject, createValidation, getProjects, deleteProject } from "../../../controllers/projectsController";
+import { createProject, validation, getProjects, deleteProject, updateProject } from "../../../controllers/projectsController";
 import { Validation } from "../../../libs/utils/validation";
 
 const app = new Hono();
@@ -17,7 +17,15 @@ app.get("/", Validation.list, getProjects);
  * @route POST /api/projects
  * @param { name: string, description: string, image: string, published: boolean, tags: string[], source: string[], authors: string[], languages: string[] }
  */
-app.post("/", createValidation, createProject);
+app.post("/", validation, createProject);
+
+
+/**
+ * Updates an existing project.
+ * @route PUT /api/projects/:id
+ * @param { id: number, name: string, description: string, image: string, published: boolean, tags: string[], source: string[], authors: string[], languages: string[] }
+*/
+app.patch("/:id", Validation.update, validation, updateProject);
 
 
 /**

@@ -50,7 +50,49 @@ export class Validation {
         await next();
     }
 
+    /**
+     * Validates the query parameters for the delete endpoint.
+     * @param {Context} c - The Hono context object.
+     * @satisfies { id: number }
+    */
     static delete = async (c: Context, next: () => Promise<void>): Promise<void> => {
+        const params = {
+            ...c.req.param(),
+            ...await c.req.parseBody(),
+            ...await c.req.raw.json(),
+        };
+
+        const validatedParams = {
+            id: params.id ? Number(params.id) : undefined,
+            status: params.status === undefined ? true : params.status === "true",
+            is_deleted: params.is_deleted === undefined ? false : params.is_deleted === "true",
+        };
+
+        const schema = z.object({
+            id: z.number().min(1),
+        });
+
+        // @ts-ignore
+        const { success, error } = schema.safeParse(validatedParams);
+
+        if (!success) {
+            // @ts-ignore
+            return c.json(response.error([Array.from(error.errors).map(err => {
+                // @ts-ignore
+                return { field: err.path.join("."), message: err.message, type: err.code };
+            })], 400));
+        }
+
+        c.set("validatedParams", params);
+        await next();
+    }
+
+    /**
+     * Validates the query parameters for the update endpoint.
+     * @param {Context} c - The Hono context object.
+     * @satisfies { id: number }
+     */
+    static update = async (c: Context, next: () => Promise<void>): Promise<void> => {
         const params = c.req.param();
 
         const validatedParams = {
@@ -67,11 +109,12 @@ export class Validation {
         if (!success) {
             // @ts-ignore
             return c.json(response.error([Array.from(error.errors).map(err => {
+                // @ts-ignore
                 return { field: err.path.join("."), message: err.message, type: err.code };
             })], 400));
         }
 
-        c.set("validatedParams", params);
+        c.set("validated", params);
         await next();
     }
 }

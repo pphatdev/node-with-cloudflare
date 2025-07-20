@@ -4,38 +4,13 @@ import { projects } from "../db/projects";
 import { z } from "zod";
 import { sql } from "drizzle-orm";
 import { getTotal } from "../libs/utils";
+import { Project } from "../types/projects";
 
 const response = new Response();
 
-interface ProjectDbRow {
-    id: number;
-    name: string;
-    description: string;
-    image: string;
-    published: boolean;
-    tags: string | string[];
-    source: string;
-    authors: string | string[];
-    languages: string | string[];
-    [key: string]: any;
-}
-
-interface Project {
-    id: number;
-    name: string;
-    description: string;
-    image: string;
-    published: boolean;
-    tags: string[];
-    source: string;
-    authors: string[];
-    languages: string[];
-    [key: string]: any;
-}
-
 class ProjectsController {
 
-    static createValidation = async (c: Context, next: () => Promise<void>): Promise<void> => {
+    static validation = async (c: Context, next: () => Promise<void>): Promise<void> => {
         /**
          * Accept both query parameters and body
          * This allows for flexibility in how the request is made
@@ -69,6 +44,7 @@ class ProjectsController {
             })], 400));
         }
         c.set("validated", {
+            ...c.get("validated") || {},
             ...params,
             tags: JSON.stringify(params.tags),
             source: JSON.stringify(params.source),
@@ -92,7 +68,18 @@ class ProjectsController {
             const total = await getTotal(c, projects, where);
 
             // Get paginated results
-            const query = db.select()
+            const query = db
+                .select({
+                    id: projects.id,
+                    name: projects.name,
+                    description: projects.description,
+                    image: projects.image,
+                    published: projects.published,
+                    tags: projects.tags,
+                    source: projects.source,
+                    authors: projects.authors,
+                    languages: projects.languages
+                })
                 .from(projects)
                 .where(where)
                 .orderBy(projects[sort])
@@ -105,7 +92,7 @@ class ProjectsController {
                 return c.json(response.error("Failed to fetch projects", 500), 500);
             }
 
-            const data: Project[] = results.map((row: ProjectDbRow) => ({
+            const data: Project[] = results.map((row: Project) => ({
                 ...row,
                 tags: Array.isArray(row.tags) ? row.tags : JSON.parse(row.tags || "[]"),
                 source: Array.isArray(row.source) ? row.source : JSON.parse(row.source || "[]"),
@@ -120,7 +107,6 @@ class ProjectsController {
             return c.json(response.error("Failed to fetch projects", 500), 500);
         }
     }
-
 
     static async createProject(c: Context): Promise<any> {
         try {
@@ -140,6 +126,28 @@ class ProjectsController {
         }
     }
 
+    static async updateProject(c: Context): Promise<any> {
+        try {
+            const params = c.get("validated");
+            const db = c.get("db");
+
+            const { success } = await db
+                .update(projects)
+                .set(params)
+                .where(sql`${projects.id} = ${params.id}`)
+                .run();
+
+            if (!success) {
+                return c.json(response.error("Failed to update project", 500), 500);
+            }
+
+            return c.json(response.success({}, 200, "Project updated successfully"), 200);
+
+        } catch (error) {
+            console.error("Error in updateProject:", error);
+            return c.json(response.error("Failed to update project", 500), 500);
+        }
+    }
 
     static async deleteProject(c: Context): Promise<any> {
         try {
@@ -165,10 +173,11 @@ class ProjectsController {
 }
 
 export const {
+    validation,
     getProjects,
     createProject,
-    createValidation,
     deleteProject,
+    updateProject
 } = ProjectsController;
 
 export default ProjectsController;
