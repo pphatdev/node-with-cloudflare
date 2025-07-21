@@ -56,7 +56,7 @@ class ProjectsController {
 
     static async getProjects(c: Context): Promise<any> {
         try {
-            const params = c.get("validatedParams");
+            const params = c.get("validated");
             const { page = 1, limit = 10, sort = "id", search = "", status = true, is_deleted } = params;
 
             const offset = (page - 1) * limit;

@@ -46,7 +46,10 @@ export class Validation {
             return c.json(response.error([errors], 400));
         }
 
-        c.set("validatedParams", validatedParams);
+        c.set("validated", {
+            ...params,
+            ...validatedParams,
+        });
         await next();
     }
 
@@ -83,7 +86,10 @@ export class Validation {
             })], 400));
         }
 
-        c.set("validatedParams", params);
+        c.set("validated", {
+            ...params,
+            ...validatedParams
+        });
         await next();
     }
 
