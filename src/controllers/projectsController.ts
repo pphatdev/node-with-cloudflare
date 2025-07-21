@@ -111,8 +111,9 @@ class ProjectsController {
     static async updateProject(c: Context): Promise<any> {
         try {
             const params = c.get("validated");
-            const db = c.get("db");
+            delete params.created_date;
 
+            const db = c.get("db");
             const { success } = await db
                 .update(projects)
                 .set(params)
