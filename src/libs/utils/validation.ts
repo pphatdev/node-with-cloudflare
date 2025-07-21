@@ -15,7 +15,10 @@ export class Validation {
      */
     static list = async (c: Context, next: () => Promise<void>): Promise<void> => {
 
-        const params = { ...await c.req.parseBody(), ...c.req.query() };
+        const params = {
+            ...await c.req.parseBody(),
+            ...c.req.query()
+        };
 
         // create a new object with converted types
         const validatedParams = {
