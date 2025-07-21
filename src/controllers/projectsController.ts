@@ -3,11 +3,11 @@ import { Response } from "../libs/utils/response";
 import { projects } from "../db/projects";
 import { z } from "zod";
 import { sql } from "drizzle-orm";
-import { getTotal } from "../libs/utils";
 import { Project } from "../types/projects";
+import { getTotal, pagination } from "../db/schema-helper";
+import { toJSONParse } from "../libs/utils";
 
 const response = new Response();
-
 class ProjectsController {
 
     static validation = async (c: Context, next: () => Promise<void>): Promise<void> => {
@@ -44,8 +44,8 @@ class ProjectsController {
             })], 400));
         }
         c.set("validated", {
-            ...c.get("validated") || {},
             ...params,
+            ...c.get("validated") || {},
             tags: JSON.stringify(params.tags),
             source: JSON.stringify(params.source),
             authors: JSON.stringify(params.authors),
@@ -56,48 +56,30 @@ class ProjectsController {
 
     static async getProjects(c: Context): Promise<any> {
         try {
-            const params = c.get("validated");
-            const { page = 1, limit = 10, sort = "id", search = "", status = true, is_deleted } = params;
-
-            const offset = (page - 1) * limit;
-            const db = c.get("db");
+            const { search = "", status = true, is_deleted } = c.get("validated") || {};
+            const { id, name, description, image, published, tags, source, authors, languages } = projects
 
             const where = sql`${projects.status} = ${status ? 1 : 0} AND ${projects.is_deleted} = ${is_deleted ? 1 : 0} AND ${projects.name} LIKE ${`%${search}%`}`;
 
             // Get total count
             const total = await getTotal(c, projects, where);
 
-            // Get paginated results
-            const query = db
-                .select({
-                    id: projects.id,
-                    name: projects.name,
-                    description: projects.description,
-                    image: projects.image,
-                    published: projects.published,
-                    tags: projects.tags,
-                    source: projects.source,
-                    authors: projects.authors,
-                    languages: projects.languages
-                })
-                .from(projects)
-                .where(where)
-                .orderBy(projects[sort])
-                .limit(limit)
-                .offset(offset);
+            // Pagination List
+            const { results, success } = await pagination(c, {
+                select: { id, name, description, image, published, tags, source, authors, languages },
+                table: projects,
+                where
+            });
 
-            const { results, success } = await query.run();
-
-            if (!success) {
+            if (!success)
                 return c.json(response.error("Failed to fetch projects", 500), 500);
-            }
 
             const data: Project[] = results.map((row: Project) => ({
                 ...row,
-                tags: Array.isArray(row.tags) ? row.tags : JSON.parse(row.tags || "[]"),
-                source: Array.isArray(row.source) ? row.source : JSON.parse(row.source || "[]"),
-                authors: Array.isArray(row.authors) ? row.authors : JSON.parse(row.authors || "[]"),
-                languages: Array.isArray(row.languages) ? row.languages : JSON.parse(row.languages || "[]"),
+                tags: toJSONParse(row.tags),
+                source: toJSONParse(row.source),
+                authors: toJSONParse(row.authors),
+                languages: toJSONParse(row.languages),
             }));
 
             return c.json(response.paginate(data, total, 200, "Request was successful"), 200);
@@ -170,14 +152,7 @@ class ProjectsController {
             return c.json(response.error("Failed to delete project", 500), 500);
         }
     }
-}
+};
 
-export const {
-    validation,
-    getProjects,
-    createProject,
-    deleteProject,
-    updateProject
-} = ProjectsController;
-
+export const { validation, getProjects, createProject, deleteProject, updateProject } = ProjectsController;
 export default ProjectsController;
