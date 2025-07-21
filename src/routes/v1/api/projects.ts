@@ -22,7 +22,7 @@ app.post("/", validation, createProject);
 
 /**
  * Updates an existing project.
- * @route PUT /api/projects/:id
+ * @route PATCH /api/projects/:id
  * @param { id: number, name: string, description: string, image: string, published: boolean, tags: string[], source: string[], authors: string[], languages: string[] }
 */
 app.patch("/:id", Validation.update, validation, updateProject);
