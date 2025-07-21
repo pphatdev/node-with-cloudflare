@@ -1,7 +1,7 @@
 import { Context } from "hono";
 import { z } from "zod";
 import { Response } from "../libs/utils/response";
-import { createProjectsTableQuery } from "./projects";
+import { createProjectsTableQuery } from "./schemas/projects";
 
 const response = new Response();
 

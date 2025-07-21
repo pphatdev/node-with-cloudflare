@@ -1,4 +1,4 @@
-import * as Projects from "./projects";
+import * as Projects from "./schemas/projects";
 
 export const {
     projects,

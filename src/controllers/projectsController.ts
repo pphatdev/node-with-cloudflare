@@ -1,6 +1,6 @@
 import { Context } from "hono";
 import { Response } from "../libs/utils/response";
-import { projects } from "../db/projects";
+import { projects } from "../db/schemas/projects";
 import { z } from "zod";
 import { sql } from "drizzle-orm";
 import { Project } from "../types/projects";
