@@ -153,7 +153,38 @@ class ProjectsController {
             return c.json(response.error("Failed to delete project", 500), 500);
         }
     }
+
+    static async getDetailProject(c: Context): Promise<any> {
+        try {
+            const { id } = c.get("validated");
+            const db = c.get("db");
+
+            const { results, success } = await db
+                .select()
+                .from(projects)
+                .where(sql`${projects.id} = ${id}`)
+                .run();
+
+            if (!success) {
+                return c.json(response.error("Project not found", 404), 404);
+            }
+
+            const data: Project = {
+                ...results[0],
+                tags: toJSONParse(results[0].tags),
+                source: toJSONParse(results[0].source),
+                authors: toJSONParse(results[0].authors),
+                languages: toJSONParse(results[0].languages),
+            };
+
+            return c.json(response.success(data, 200, "Project fetched successfully"), 200);
+
+        } catch (error) {
+            console.error("Error in getDetailProject:", error);
+            return c.json(response.error("Failed to fetch project details", 500), 500);
+        }
+    }
 };
 
-export const { validation, getProjects, createProject, deleteProject, updateProject } = ProjectsController;
+export const { validation, getProjects, createProject, deleteProject, updateProject, getDetailProject } = ProjectsController;
 export default ProjectsController;
