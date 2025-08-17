@@ -64,8 +64,8 @@ export class Validation {
     static delete = async (c: Context, next: () => Promise<void>): Promise<void> => {
         const params = {
             ...c.req.param(),
+            ...c.req.query(),
             ...await c.req.parseBody(),
-            ...await c.req.raw.json(),
         };
 
         const validatedParams = {
