@@ -1,11 +1,20 @@
 export type Article = {
     id: number;
-    name: string;
-    description: string;
-    image: string;
+    title: string;
+    slug: string;
+    content: string | null | string;
+    excerpt: string;
+    author_id: number;
+    category_id: number;
     published: boolean;
-    tags: string[];
-    source: string;
-    authors: string[];
-    languages: string[];
+    published_date: string | null;
+    featured_image: string | null;
+    meta_title: string | null;
+    meta_description: string | null;
+    meta_keywords: string[] | null | string;
+    is_featured: boolean;
+    view_count: number;
+    tags: string[] | string;
+    created_date: string;
+    updated_date: string;
 };
