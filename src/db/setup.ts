@@ -1,37 +1,36 @@
 import { Context } from "hono";
-import { z } from "zod";
 import { Response } from "../libs/utils/response";
-import { createProjectsTableQuery } from "./schemas/projects";
+import { createProjectsTable } from "./schemas/projects";
+import { createArticlesTable } from './schemas/articles';
+import { createCategoriesTable } from './schemas/categories';
+import { createSessionsTable } from "./schemas/sessions";
+import { createUsersTable } from "./schemas/users";
+import { createPasswordResetTokensTable } from "./schemas/password-reset-tokens";
 
 const response = new Response();
-
-let tables = [];
+const tables = [];
 
 export const initialize = async (c: Context) => {
     try {
-        const body = await c.req.parseBody();
-        const result = z.object({
-            // db: z.string().min(1, "Database name is required")
-        }).safeParse(body);
-
-        if (!result.success) {
-            // @ts-ignore
-            const errors = Array.from(result.error.errors).map(err => [`${err.message} field ${err.path.join(".")}`]);
-            // @ts-ignore
-            return c.json(response.error([errors], 400));
-        }
-
         const db = await c.get("db");
-        const { success, meta } = await db.run(createProjectsTableQuery);
+        const projectsTable = await createProjectsTable(db);
+        const articlesTable = await createArticlesTable(db);
+        const categoriesTable = await createCategoriesTable(db);
+        const sessionsTable = await createSessionsTable(db);
+        const usersTable = await createUsersTable(db);
+        const passwordResetTokensTable = await createPasswordResetTokensTable(db);
 
-        if (success) {
-            tables.push({
-                table_name: "projects",
-                meta: meta
-            });
-        }
+        tables.push(
+            projectsTable,
+            articlesTable,
+            categoriesTable,
+            sessionsTable,
+            usersTable,
+            passwordResetTokensTable
+        );
 
-        return c.json(response.success(tables, 200, "Database initialized successfully"));
+        const result = response.success(tables, 200, "Database initialized successfully");
+        return c.json(result);
     } catch (error) {
         console.error("Failed to initialize database:", error);
         throw new Error("Database initialization failed");
