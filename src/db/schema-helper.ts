@@ -1,13 +1,14 @@
-import { count } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 import { Context } from "hono";
+import { IsUniqueParams, PaginationParams, PaginationResponse } from "../types/schema-helper";
 
 export class SchemaHelper {
 
     /**
      * Gets the total count of records in a table based on the provided conditions.
-     * @param {c} - The Hono context.
-     * @param {table} - The database table to query.
-     * @param {where} - The conditions for the query.
+     * @param {Context} [c] The Hono context.
+     * @param {any} [table] The database table to query.
+     * @param {any} [where] The conditions for the query.
      * @returns The total count of records.
      */
     static async getTotal(c: Context, table: any, where: any): Promise<number> {
@@ -26,15 +27,14 @@ export class SchemaHelper {
 
     /**
      * Paginates the results from a database query.
-     * @param {c} - The Hono context.
-     * @param {select} - The fields to select from the table.
-     * @param {table} - The database table to query.
-     * @param {where} - The conditions for the query.
+     * @param {Context} [c] The Hono context.
+     * @param {PaginationParams} [params] The parameters for pagination, including select fields, table, and where conditions.
      * @returns An object containing the paginated results and success status.
      */
-    static async pagination(c: Context, { select, table, where, }: { select: any, table: any, where: any, }): Promise<{ results: any[], success: boolean }> {
+    static async pagination(c: Context, params: PaginationParams): Promise<PaginationResponse> {
         const db = c.get("db");
         const { page = 1, limit = 10, sort = "id", } = c.get("validated") || {};
+        const { select, table, where } = params;
 
         const offset = (page - 1) * limit;
         const query = db
@@ -48,7 +48,29 @@ export class SchemaHelper {
         return { results, success };
     }
 
+    /**
+     * Checks if a value is unique in a specific table and field.
+     * @param {Context} [c] The Hono context.
+
+     * @returns {Promise<boolean>} Whether the value is unique.
+     */
+    static async isUnique(c: Context, params: IsUniqueParams): Promise<boolean> {
+        try {
+            const db = c.get("db");
+            const { table, field, value } = params;
+            const query = db.select({ count: count() })
+                .from(table)
+                .where(eq(table[field], value))
+                .limit(1);
+            const { results } = await query.run();
+            const total = results?.[0]?.['count(*)'] || 0;
+            return total === 0;
+        } catch (error) {
+            console.error("Error in isUnique:", error);
+            return false;
+        }
+    }
 }
 
-export const { getTotal, pagination } = SchemaHelper;
+export const { getTotal, pagination, isUnique } = SchemaHelper;
 export default SchemaHelper;
