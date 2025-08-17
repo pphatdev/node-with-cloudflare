@@ -36,3 +36,28 @@ export const createProjectsTableQuery = `
         updated_date TEXT DEFAULT CURRENT_TIMESTAMP
     );
 `;
+
+export const createProjectsTable = (db: any) => {
+    return db.run(createProjectsTableQuery)
+        .then(() => {
+            console.log("Projects table created successfully.");
+            return {
+                table_name: "projects",
+                columns: [
+                    { name: "id", type: "INTEGER", nullable: false },
+                    { name: "name", type: "TEXT", nullable: false },
+                    { name: "description", type: "TEXT", nullable: true },
+                    { name: "image", type: "TEXT", nullable: true },
+                    { name: "published", type: "INTEGER", nullable: false },
+                    { name: "tags", type: "TEXT", nullable: true },
+                    { name: "source", type: "TEXT", nullable: true },
+                    { name: "authors", type: "TEXT", nullable: true },
+                    { name: "languages", type: "TEXT", nullable: true },
+                ],
+            };
+        })
+        .catch((error: any) => {
+            console.error("Error creating projects table:", error);
+            throw new Error("Failed to create projects table");
+        });
+}
