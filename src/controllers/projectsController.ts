@@ -10,6 +10,11 @@ import { toJSONParse } from "../libs/utils";
 const response = new Response();
 class ProjectsController {
 
+    /**
+     * Validates the incoming request data for creating or updating a project.
+     * @param {Context} c - The Hono context object containing request data.
+     * @param {Function} next - The next middleware function to call if validation passes.
+     */
     static validation = async (c: Context, next: () => Promise<void>): Promise<void> => {
         /**
          * Accept both query parameters and body
@@ -54,6 +59,11 @@ class ProjectsController {
         await next();
     }
 
+    /**
+     * Fetches a list of projects with optional search and pagination.
+     * @param {Context} c - The Hono context object containing request data.
+     * @returns {Promise<any>} - A JSON response containing the list of projects or an error message.
+     */
     static async getProjects(c: Context): Promise<any> {
         try {
             const { search = "", status = true, is_deleted } = c.get("validated") || {};
@@ -90,6 +100,11 @@ class ProjectsController {
         }
     }
 
+    /**
+     * Creates a new project in the database.
+     * @param {Context} c - The Hono context object containing request data.
+     * @returns {Promise<any>} - A JSON response containing the created project or an error message.
+     */
     static async createProject(c: Context): Promise<any> {
         try {
             const params = c.get("validated");
@@ -108,6 +123,11 @@ class ProjectsController {
         }
     }
 
+    /**
+     * Updates an existing project in the database.
+     * @param {Context} c - The Hono context object containing request data.
+     * @returns {Promise<any>} - A JSON response containing the updated project or an error message.
+     */
     static async updateProject(c: Context): Promise<any> {
         try {
             const params = c.get("validated");
@@ -132,6 +152,11 @@ class ProjectsController {
         }
     }
 
+    /**
+     * Deletes a project from the database.
+     * @param {Context} c - The Hono context object containing request data.
+     * @returns {Promise<any>} - A JSON response containing the result of the deletion or an error message.
+     */
     static async deleteProject(c: Context): Promise<any> {
         try {
             const db = c.get("db");
@@ -154,6 +179,11 @@ class ProjectsController {
         }
     }
 
+    /**
+     * Fetches the details of a specific project.
+     * @param {Context} c - The Hono context object containing request data.
+     * @returns {Promise<any>} - A JSON response containing the project details or an error message.
+     */
     static async getDetailProject(c: Context): Promise<any> {
         try {
             const { id } = c.get("validated");
