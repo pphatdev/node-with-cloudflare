@@ -1,5 +1,6 @@
 import { Hono } from 'hono';
 import { initialize } from '../../../db/setup';
+import Auths from './auth';
 import Projects from './projects';
 import Articles from './articles';
 import Users from "./users";
@@ -11,6 +12,11 @@ const app = new Hono();
 
 app.use('*', drizzleMiddleware);
 app.post('/setup', initialize);
+
+/**
+ * API routes for Authentication
+ */
+app.route('/auth', Auths);
 
 /**
  * API routes for Projects
