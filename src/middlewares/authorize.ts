@@ -1,6 +1,8 @@
 import { Context } from "hono";
 import { jwtVerify } from "jose";
 import { secret } from "../libs/utils";
+import { Response } from "../libs/utils/response";
+const response = new Response();
 
 export class AuthsMiddleware {
     /**
@@ -12,7 +14,11 @@ export class AuthsMiddleware {
         const authHeader = c.req.header('Authorization');
 
         if (!authHeader) {
-            return c.json({ error: 'Unauthorized' }, 401);
+            return c.json(response.error("Unauthorized", 401), 401);
+        }
+
+        if (!authHeader.startsWith('Bearer ')) {
+            return c.json(response.error("Invalid token format", 400), 400);
         }
 
         const token = authHeader.split(' ')[1];
@@ -22,7 +28,7 @@ export class AuthsMiddleware {
             c.set('user', payload);
             await next();
         } catch (e) {
-            return c.json({ error: 'Invalid token' }, 401);
+            return c.json(response.error("Invalid token", 401), 401);
         }
     }
 }
