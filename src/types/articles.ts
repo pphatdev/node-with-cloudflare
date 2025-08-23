@@ -5,6 +5,7 @@ export type Article = {
     content: string | null | string;
     excerpt: string;
     author_id: number;
+    authors?: { id: number; name: string }[];
     category_id: number;
     published: boolean;
     published_date: string | null;
