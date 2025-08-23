@@ -1,7 +1,6 @@
 import { Hono } from "hono";
 import { Validation } from "../../../libs/utils/validation";
-import { createArticle, deleteArticle, getArticles, updateArticle, validation } from "../../../controllers/articlesController";
-import { getDetailCategory } from "../../../controllers/categoriesController";
+import { createArticle, deleteArticle, getArticles, updateArticle, validation, getDetailArticles } from "../../../controllers/articlesController";
 const app = new Hono();
 
 /**
@@ -17,8 +16,7 @@ app.get("/", Validation.list, getArticles);
  * @route GET /api/articles/:id
  * @param { id: number }
  */
-app.get("/:id", Validation.get, getDetailCategory);
-
+app.get("/:id", Validation.get, getDetailArticles);
 
 
 /**
