@@ -1,7 +1,13 @@
 import { Hono } from "hono";
 import { Validation } from "../../../libs/utils/validation";
 import { createUsers, deleteUser, getUsers, updateUser, validation } from "../../../controllers/usersController";
+import { authorize } from "../../../middlewares/authorize";
 const app = new Hono();
+
+/**
+ * Middleware for authorization
+ */
+app.use('*', authorize);
 
 /**
  * Fetches a list of users.

@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { Validation } from "../../../libs/utils/validation";
+import { authorize } from "../../../middlewares/authorize";
 import { createCategories, deleteCategories, getCategories, getDetailCategory, updateCategories, validation } from "../../../controllers/categoriesController";
 const app = new Hono();
 
@@ -25,6 +26,12 @@ app.get("/:id", Validation.get, getDetailCategory);
  * @param { name: string, slug: string, description: string, parent_id?: number, image?: string, is_active: boolean }
  */
 app.post("/", validation, createCategories);
+
+
+/**
+ * Middleware for authorization
+ */
+app.use('*', authorize);
 
 
 /**

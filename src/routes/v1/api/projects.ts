@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { createProject, validation, getProjects, deleteProject, updateProject, getDetailProject } from "../../../controllers/projectsController";
 import { Validation } from "../../../libs/utils/validation";
+import { authorize } from "../../../middlewares/authorize";
 
 const app = new Hono();
 
@@ -13,6 +14,21 @@ const app = new Hono();
  * @throws { 500 } Internal server error
  */
 app.get("/", Validation.list, getProjects);
+
+
+/**
+ * Fetches a project by ID.
+ * @route GET /api/projects/:id
+ * @param { id: number }
+ * @returns { { id: number, name: string, description: string, image: string, published: boolean, tags: string[], source: string[], authors: string[], languages: string[] } }
+ */
+app.get("/:id", Validation.get, getDetailProject);
+
+
+/**
+ * Middleware for authorization
+ */
+app.use('*', authorize);
 
 
 /**
@@ -35,15 +51,6 @@ app.post("/", validation, createProject);
  * @throws { 400 } Validation error
 */
 app.patch("/:id", Validation.update, validation, updateProject);
-
-
-/**
- * Fetches a project by ID.
- * @route GET /api/projects/:id
- * @param { id: number }
- * @returns { { id: number, name: string, description: string, image: string, published: boolean, tags: string[], source: string[], authors: string[], languages: string[] } }
- */
-app.get("/:id", Validation.get, getDetailProject);
 
 
 /**

@@ -159,10 +159,11 @@ export class ArticlesController {
      * @returns {Promise<any>} - A JSON response containing the created article or an error message.
      */
     static async createArticle(c: Context): Promise<any> {
+        const user = c.get("user");
         const params = c.get("validated");
         const db = c.get("db");
         try {
-            const { success, results } = await db.insert(articles).values(params).run();
+            const { success, results } = await db.insert(articles).values({ ...params, author_id: user.id }).run();
             console.log("Create article results:", results, "success:", success);
 
             if (!success) {
@@ -232,6 +233,81 @@ export class ArticlesController {
             return c.json(response.error("Failed to delete article", 500), 500);
         }
     }
+
+    /**
+     * Get article details by ID.
+     * @param {Context} c - The Hono context object containing request data.
+     * @returns {Promise<any>} - A JSON response containing the article details or an error message.
+     */
+    static async getDetailArticles(c: Context): Promise<any> {
+        try {
+            const { id } = c.get("validated");
+            const db = c.get("db");
+
+            // First, get the article
+            const { results: articleResults, success: articleSuccess } = await db
+                .select()
+                .from(articles)
+                .where(sql`${articles.id} = ${id}`)
+                .run();
+
+            if (!articleSuccess || articleResults.length === 0) {
+                return c.json(response.error("Article not found", 404), 404);
+            }
+
+            const article = articleResults[0];
+
+            // Get author info
+            const { results: authorResults } = await db
+                .select()
+                .from(users)
+                .where(sql`${users.id} = ${article.author_id}`)
+                .run();
+
+            // Get category info
+            const { results: categoryResults } = await db
+                .select()
+                .from(categories)
+                .where(sql`${categories.id} = ${article.category_id}`)
+                .run();
+
+            const data = {
+                // id: article.id,
+                title: article.title,
+                slug: `/${article.slug}/${categoryResults[0].slug}`,
+                content: JSON.stringify(toJSONParse(article.content)),
+                description: article.excerpt,
+                cover: article.featured_image,
+                meta: {
+                    title: article.meta_title,
+                    description: article.meta_description,
+                    keywords: toJSONParse(article.meta_keywords)
+                },
+                is_featured: Boolean(article.is_featured),
+                view_count: article.view_count,
+                tags: toJSONParse(article.tags),
+                published: Boolean(article.published),
+                published_date: article.published_date,
+                modified_date: article.updated_date,
+                category: categoryResults[0] ? {
+                    id: categoryResults[0].id,
+                    name: categoryResults[0].name,
+                    slug: categoryResults[0].slug
+                } : null,
+                author: authorResults[0] ? {
+                    id: authorResults[0].id,
+                    name: authorResults[0].name,
+                    email: authorResults[0].email
+                } : null
+            };
+
+            return c.json(response.success(data, 200, "Article fetched successfully"), 200);
+
+        } catch (error) {
+            console.error("Error in getDetailArticles:", error);
+            return c.json(response.error("Failed to retrieve article", 500), 500);
+        }
+    }
 }
 
 
@@ -240,7 +316,8 @@ export const {
     createArticle,
     validation,
     deleteArticle,
-    updateArticle
+    updateArticle,
+    getDetailArticles
 } = ArticlesController;
 
 export default ArticlesController;

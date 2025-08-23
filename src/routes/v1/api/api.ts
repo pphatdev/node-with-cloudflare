@@ -7,7 +7,6 @@ import Users from "./users";
 import Sessions from "./sessions";
 import Categories from "./categories";
 import drizzleMiddleware from '../../../middlewares/drizzle';
-import { authorize } from '../../../middlewares/authorize';
 
 const app = new Hono();
 
@@ -25,11 +24,6 @@ app.post('/setup', initialize);
  * API routes for Authentication
  */
 app.route('/auth', Auths);
-
-/**
- * Middleware for authorization
- */
-app.use('*', authorize);
 
 /**
  * API routes for Projects

@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { Validation } from "../../../libs/utils/validation";
 import { createSession, deleteSession, getDetailSession, getSessions, updateSession, validation } from "../../../controllers/sessionsController";
+import { authorize } from "../../../middlewares/authorize";
 const app = new Hono();
 
 /**
@@ -17,6 +18,12 @@ app.get("/", Validation.list, getSessions);
  * @param { id: number }
  */
 app.get("/:id", Validation.get, getDetailSession);
+
+
+/**
+ * Middleware for authorization
+ */
+app.use('*', authorize);
 
 
 /**
