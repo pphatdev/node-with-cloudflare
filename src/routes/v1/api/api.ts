@@ -7,13 +7,15 @@ import Users from "./users";
 import Sessions from "./sessions";
 import Categories from "./categories";
 import drizzleMiddleware from '../../../middlewares/drizzle';
+import { corsMiddleware } from '../../../middlewares/cores';
 
 const app = new Hono();
+
 
 /**
  * Middleware to initialize the database connection
  */
-app.use('*', drizzleMiddleware);
+app.use('*', corsMiddleware, drizzleMiddleware);
 
 /**
  * Middleware to initialize the database connection
