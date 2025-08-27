@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { login, logout } from "../../../controllers/authsController";
+import { login, logout, verifyToken } from "../../../controllers/authsController";
 import { createUsers, validation } from "../../../controllers/usersController";
 import { authorize } from "../../../middlewares/authorize";
 const app = new Hono();
@@ -26,5 +26,13 @@ app.post("/login", login);
  * @param { token: string }
  */
 app.post('/logout', authorize, logout);
+
+
+/**
+ * Verifies the user's token.
+ * @route GET /v1/api/auth/verify
+ * @param { token: string }
+ */
+app.get('/verify', verifyToken);
 
 export default app;

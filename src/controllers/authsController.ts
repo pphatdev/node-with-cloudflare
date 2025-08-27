@@ -1,14 +1,13 @@
 import { Context } from "hono";
 import { sql } from 'drizzle-orm';
+import { z } from 'zod';
 import { compare } from "bcryptjs";
 import { Response } from '../libs/utils/response';
-import { z } from 'zod';
 import { SignJWT } from "jose";
 import { secret } from "../libs/utils";
 import { sessions } from '../db/schemas/sessions';
 import { getConnInfo } from 'hono/cloudflare-workers'
 import { users } from '../db/schemas/users';
-
 
 const response = new Response();
 
@@ -86,6 +85,70 @@ export class AuthsController {
         }, 200, "Login successfully"), 200);
     }
 
+
+    /**
+     * Verifies the user's token.
+     * @param {Context} c - The Hono context object containing request data.
+     * @returns {Promise<any>} - A JSON response indicating the verification result.
+     */
+    static async verifyToken(c: Context): Promise<any> {
+        const authHeader = c.req.header("Authorization");
+
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            // @ts-ignore
+            return c.json({
+                status: 401,
+                success: false,
+                version: Response.VERSION,
+                message: "No token provided. Make sure to include it in the Authorization header."
+            }, 401);
+        }
+
+        const token = authHeader.split(" ")[1];
+        const db = c.get("db");
+
+        try {
+            const { results } = await db.select().from(sessions).where(sql`${sessions.token} = ${token} and ${sessions.status} = 1`).run();
+            console.log(results);
+
+            if (results.length === 0) {
+                return c.json({
+                    status: 401,
+                    success: false,
+                    version: Response.VERSION,
+                    message: "Token has been revoked. Please log in again."
+                }, 401);
+            }
+
+            // check token expiration
+            const isExpired = results[0].expires_at < new Date();
+            if (isExpired) {
+                return c.json({
+                    status: 401,
+                    success: false,
+                    version: Response.VERSION,
+                    message: "Token is expired. Please log in again."
+                }, 401);
+            }
+
+            return c.json({
+                status: 200,
+                success: true,
+                version: Response.VERSION,
+                message: "Token is valid"
+            }, 200);
+        } catch (error) {
+            console.error("Error verifying token:", error);
+            return c.json({
+                status: 500,
+                success: false,
+                version: Response.VERSION,
+                message: "Internal server error"
+            }, 500);
+        }
+    }
+
+
     /**
      * Handles user logout.
      * @param {Context} c - The Hono context object containing request data.
@@ -129,7 +192,8 @@ export class AuthsController {
 
 export const {
     login,
-    logout
+    logout,
+    verifyToken
 } = AuthsController;
 
 
