@@ -1,14 +1,8 @@
 import { Hono } from "hono";
-import { login } from "../../../controllers/authsController";
+import { login, logout } from "../../../controllers/authsController";
 import { createUsers, validation } from "../../../controllers/usersController";
+import { authorize } from "../../../middlewares/authorize";
 const app = new Hono();
-
-/**
- * Handles user login.
- * @route POST /v1/api/auth/login
- * @param { email: string, password: string }
- */
-app.post("/login", login);
 
 /**
  * Handles user registration.
@@ -18,5 +12,19 @@ app.post("/login", login);
 app.post("/register", validation, createUsers);
 
 
+/**
+ * Handles user login.
+ * @route POST /v1/api/auth/login
+ * @param { email: string, password: string }
+ */
+app.post("/login", login);
+
+
+/**
+ * Handles user logout.
+ * @route POST /v1/api/auth/logout
+ * @param { token: string }
+ */
+app.post('/logout', authorize, logout);
 
 export default app;
