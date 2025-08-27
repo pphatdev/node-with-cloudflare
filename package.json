@@ -20,10 +20,11 @@
 		"wrangler": "^4.14.4"
 	},
 	"dependencies": {
+		"@hono/node-server": "^1.19.0",
 		"bcryptjs": "^3.0.2",
 		"dotenv": "^17.2.0",
 		"drizzle-orm": "^0.43.1",
-		"hono": "^4.7.9",
+		"hono": "^4.9.4",
 		"jose": "^6.0.12",
 		"process": "^0.11.10"
 	}
