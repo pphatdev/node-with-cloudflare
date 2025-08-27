@@ -21,17 +21,17 @@ app.get("/:id", Validation.get, getDetailCategory);
 
 
 /**
+ * Middleware for authorization
+ */
+app.use('*', authorize);
+
+
+/**
  * Creates a new session.
  * @route POST /api/categories
  * @param { name: string, slug: string, description: string, parent_id?: number, image?: string, is_active: boolean }
  */
 app.post("/", validation, createCategories);
-
-
-/**
- * Middleware for authorization
- */
-app.use('*', authorize);
 
 
 /**

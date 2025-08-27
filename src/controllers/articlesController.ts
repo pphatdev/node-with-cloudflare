@@ -162,6 +162,7 @@ export class ArticlesController {
         const user = c.get("user");
         const params = c.get("validated");
         const db = c.get("db");
+
         try {
             const { success, results } = await db.insert(articles).values({ ...params, author_id: user.id }).run();
             console.log("Create article results:", results, "success:", success);
