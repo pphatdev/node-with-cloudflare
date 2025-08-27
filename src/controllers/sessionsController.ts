@@ -144,7 +144,7 @@ export class SessionsController {
     static async getSessions(c: Context): Promise<any> {
         try {
             const { search = "", status = true, is_deleted } = c.get("validated") || {};
-            const { id, user_id, expires_date, created_date, updated_date } = sessions
+            const { id, user_id, token, expires_date, created_date, updated_date, devices, ip_address } = sessions
 
             const where = sql`${sessions.status} = ${status ? 1 : 0} AND ${sessions.is_deleted} = ${is_deleted ? 1 : 0} AND ${sessions.user_id} LIKE ${`%${search}%`}`;
 
@@ -153,7 +153,7 @@ export class SessionsController {
 
             // Pagination List
             const { results, success } = await pagination(c, {
-                select: { id, user_id, expires_date, created_date, updated_date },
+                select: { id, token, user_id, devices, ip_address, expires_date, created_date, updated_date },
                 table: sessions,
                 where
             });
