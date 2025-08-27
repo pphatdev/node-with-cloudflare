@@ -34,10 +34,7 @@ export class AuthsController {
 
         if (!success) {
             // @ts-ignore
-            return c.json(response.error([Array.from(error.errors).map(err => {
-                // @ts-ignore
-                return { field: err.path.join("."), message: err.message, type: err.code };
-            })], 400));
+            return c.json(response.error([Array.from(error.errors).map(err => ({ field: err.path.join("."), message: err.message, type: err.code }))], 400));
         }
 
         const { email, password } = params;
@@ -84,7 +81,7 @@ export class AuthsController {
                     ip_address: ipAddress,
                     created_date: loginDate,
                     updated_date: loginDate,
-                    expires_at: expiresAtIso
+                    expires_date: expiresAtIso
                 }).run();
             } catch (error) {
                 console.error("Error inserting session:", error);
