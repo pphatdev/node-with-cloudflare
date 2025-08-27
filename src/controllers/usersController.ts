@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm";
 import { Context } from "hono";
 import { users } from "../db/schemas/users";
-import { getTotal, pagination } from "../db/schema-helper";
+import { getTotal, isUnique, pagination } from "../db/schema-helper";
 import { Response } from '../libs/utils/response';
 import { User } from "../types/users";
 import { z } from 'zod';
@@ -125,6 +125,18 @@ export class UsersController {
             const db = c.get("db");
             const params = c.get("validated");
             const newPassword = await UsersController.hashPassword(params.password);
+
+            const notExistingEmail = await isUnique(c, {
+                table: users,
+                field: 'email',
+                value: params.email
+            });
+
+            if (!notExistingEmail) {
+                // @ts-ignore
+                return c.json(response.error([[{ field: "email", message: "Email already exists", type: "validation" }]], 401), 401);
+            }
+
             const { success, results } = await db.insert(users).values({ ...params, password_hash: newPassword }).run();
 
             if (!success) {
