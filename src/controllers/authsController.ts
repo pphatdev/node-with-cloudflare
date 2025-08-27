@@ -100,7 +100,7 @@ export class AuthsController {
                 status: 401,
                 success: false,
                 version: Response.VERSION,
-                message: "No token provided. Make sure to include it in the Authorization header."
+                message: "❌ No token provided. Make sure to include it in the Authorization header."
             }, 401);
         }
 
@@ -116,7 +116,7 @@ export class AuthsController {
                     status: 401,
                     success: false,
                     version: Response.VERSION,
-                    message: "Token has been revoked. Please log in again."
+                    message: "❌ Token has been revoked. Please log in again."
                 }, 401);
             }
 
@@ -127,7 +127,7 @@ export class AuthsController {
                     status: 401,
                     success: false,
                     version: Response.VERSION,
-                    message: "Token is expired. Please log in again."
+                    message: "❌ Token is expired. Please log in again."
                 }, 401);
             }
 
@@ -135,7 +135,7 @@ export class AuthsController {
                 status: 200,
                 success: true,
                 version: Response.VERSION,
-                message: "Token is valid"
+                message: "✅ Token is valid"
             }, 200);
         } catch (error) {
             console.error("Error verifying token:", error);
@@ -143,7 +143,7 @@ export class AuthsController {
                 status: 500,
                 success: false,
                 version: Response.VERSION,
-                message: "Internal server error"
+                message: "❌ Internal server error"
             }, 500);
         }
     }
@@ -190,11 +190,7 @@ export class AuthsController {
 }
 
 
-export const {
-    login,
-    logout,
-    verifyToken
-} = AuthsController;
+export const { login, logout, verifyToken } = AuthsController;
 
 
 export default AuthsController;
