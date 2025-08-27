@@ -5,7 +5,9 @@ export const sessions = sqliteTable('sessions', {
     id: text('id').primaryKey(),
     user_id: integer('user_id').notNull().references(() => users.id),
     expires_date: text("expires_date").$defaultFn(() => new Date().toISOString()),
-
+    token: text('token').notNull().unique(),
+    devices: text('devices'),
+    ip_address: text('ip_address'),
     is_deleted: integer("is_deleted").notNull().default(0),
     status: integer("status").notNull().default(1),
     created_date: text("created_date").notNull().$defaultFn(() => new Date().toISOString()),
@@ -15,9 +17,12 @@ export const sessions = sqliteTable('sessions', {
 
 export const createSessionsTableQuery = `
     CREATE TABLE IF NOT EXISTS sessions (
-        id TEXT PRIMARY KEY,
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         user_id INTEGER NOT NULL REFERENCES users(id),
         expires_date TEXT DEFAULT (datetime('now')),
+        token TEXT NOT NULL UNIQUE,
+        devices TEXT,
+        ip_address TEXT,
         is_deleted INTEGER NOT NULL DEFAULT 0,
         status INTEGER NOT NULL DEFAULT 1,
         created_date TEXT NOT NULL DEFAULT (datetime('now')),
@@ -35,6 +40,9 @@ export const createSessionsTable = (db: any) => {
                     { name: 'id', type: 'TEXT', nullable: false },
                     { name: 'user_id', type: 'INTEGER', nullable: false },
                     { name: 'expires_date', type: 'TEXT', nullable: false },
+                    { name: 'token', type: 'TEXT', nullable: false },
+                    { name: 'devices', type: 'TEXT', nullable: true },
+                    { name: 'ip_address', type: 'TEXT', nullable: true },
                     { name: 'is_deleted', type: 'INTEGER', nullable: false },
                     { name: 'status', type: 'INTEGER', nullable: false },
                     { name: 'created_date', type: 'TEXT', nullable: false },
