@@ -1,4 +1,4 @@
-import { sqliteTable, text, int } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, int, integer } from "drizzle-orm/sqlite-core";
 
 const projectColumns = {
     id: int("id").primaryKey({ autoIncrement: true }).notNull(),
@@ -10,10 +10,10 @@ const projectColumns = {
     source: text("source"),
     authors: text("authors"),
     languages: text("languages"),
-    is_deleted: int("is_deleted").notNull().default(0),
-    status: int("status").notNull().default(1),
-    created_date: text("created_date").notNull().default("CURRENT_TIMESTAMP"),
-    updated_date: text("updated_date").default("CURRENT_TIMESTAMP"),
+    is_deleted: integer("is_deleted").notNull().default(0),
+    status: integer("status").notNull().default(1),
+    created_date: text("created_date").notNull().$defaultFn(() => new Date().toISOString()),
+    updated_date: text("updated_date").$defaultFn(() => new Date().toISOString()),
 }
 
 export const projects = sqliteTable("projects", projectColumns);
@@ -32,8 +32,8 @@ export const createProjectsTableQuery = `
         languages TEXT,
         is_deleted INTEGER NOT NULL DEFAULT 0,
         status INTEGER NOT NULL DEFAULT 1,
-        created_date TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        updated_date TEXT DEFAULT CURRENT_TIMESTAMP
+        created_date TEXT NOT NULL DEFAULT (datetime('now')),
+        updated_date TEXT DEFAULT (datetime('now'))
     );
 `;
 
