@@ -195,7 +195,7 @@ class ProjectsController {
                 .where(sql`${projects.id} = ${id}`)
                 .run();
 
-            if (!success) {
+            if (!success || results.length === 0) {
                 return c.json(response.error("Project not found", 404), 404);
             }
 
