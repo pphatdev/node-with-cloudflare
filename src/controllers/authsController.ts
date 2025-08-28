@@ -8,6 +8,7 @@ import { secret } from "../libs/utils";
 import { sessions } from '../db/schemas/sessions';
 import { getConnInfo } from 'hono/cloudflare-workers'
 import { users } from '../db/schemas/users';
+import { User } from "../types/users";
 
 const response = new Response();
 
@@ -289,10 +290,44 @@ export class AuthsController {
             return c.json(response.error("Internal server error", 500), 500);
         }
     }
+
+    /**
+     * Get Me
+     */
+    static async getMe(c: Context): Promise<any> {
+        const user = c.get("user");
+        const userId = user.id;
+        const db = c.get("db");
+
+        try {
+            const { results, success } = await db
+                .select()
+                .from(users)
+                .where(sql`${users.id} = ${userId}`)
+                .run();
+
+            if (!success) {
+                return c.json(response.error("User not found", 404), 404);
+            }
+
+            const data: User = results[0];
+            delete data.password_hash;
+            delete data.is_deleted;
+            delete data.status;
+            delete data.created_date;
+            delete data.updated_date;
+
+            return c.json(response.success(data, 200, "User fetched successfully"), 200);
+
+        } catch (error) {
+            console.error("Error retrieving user:", error);
+            return c.json(response.error("Internal server error", 500), 500);
+        }
+    }
 }
 
 
-export const { login, logout, verifyToken, refreshToken } = AuthsController;
+export const { login, logout, verifyToken, refreshToken, getMe } = AuthsController;
 
 
 export default AuthsController;

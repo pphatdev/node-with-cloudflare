@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { login, logout, verifyToken } from "../../../controllers/authsController";
+import { getMe, login, logout, verifyToken } from "../../../controllers/authsController";
 import { createUsers, validation } from "../../../controllers/usersController";
 import { authorize } from "../../../middlewares/authorize";
 const app = new Hono();
@@ -26,6 +26,14 @@ app.post("/login", login);
  * @param { token: string }
  */
 app.post('/logout', authorize, logout);
+
+
+/**
+ * Handles user profile retrieval.
+ * @route GET /v1/api/auth/me
+ * @param { token: string }
+ */
+app.get('/me', authorize, getMe);
 
 
 /**
