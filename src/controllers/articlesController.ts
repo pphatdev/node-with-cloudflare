@@ -55,7 +55,7 @@ export class ArticlesController {
             meta_keywords: z.string().min(5).max(255).optional(),
             is_featured: z.boolean().default(false),
             view_count: z.number().int().default(0),
-            tags:  z.string().min(5).max(255).optional(),
+            tags: z.string().min(5).max(255).optional(),
         });
 
         // @ts-ignore
@@ -211,12 +211,15 @@ export class ArticlesController {
     static async deleteArticle(c: Context): Promise<any> {
         try {
             const db = c.get("db");
-            const id = c.get("id");
+            const { id } = c.get("validated");
+
             const { success } = await db
                 .update(articles)
                 .set({ status: 0, is_deleted: 1 })
                 .where(sql`${articles.id} = ${id}`)
                 .run();
+
+            console.log(success);
 
             if (!success) {
                 return c.json(response.error("Failed to delete article", 500), 500);
