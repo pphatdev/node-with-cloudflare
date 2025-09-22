@@ -138,12 +138,7 @@ export class ArticlesController {
             if (!success)
                 return c.json(response.error("Failed to fetch articles", 500), 500);
 
-            const data: Article[] = results.map((row: Article) => ({
-                ...row,
-                content: toJSONParse(row.content),
-                tags: toJSONParse(row.tags),
-                meta_keywords: toJSONParse(row.meta_keywords),
-            }));
+            const data: Article[] = results;
 
             return c.json(response.paginate(data, total, 200, "Request was successful"), 200);
 
