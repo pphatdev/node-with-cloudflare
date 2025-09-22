@@ -33,8 +33,7 @@ export class ArticlesController {
             published: Boolean(getParams?.published || false),
             is_featured: Boolean(getParams?.is_featured || false),
             created_date: new Date().toISOString(),
-            updated_date: new Date().toISOString(),
-            content: JSON.stringify(getParams, null, 2)
+            updated_date: new Date().toISOString()
         };
 
         const schema = z.object({
@@ -53,10 +52,10 @@ export class ArticlesController {
             featured_image: z.string().url().optional(),
             meta_title: z.string().max(200).optional(),
             meta_description: z.string().max(500).optional(),
-            meta_keywords: z.array(z.string()).optional(),
+            meta_keywords: z.string().min(10).max(255).optional(),
             is_featured: z.boolean().default(false),
             view_count: z.number().int().default(0),
-            tags: z.array(z.string().min(2).max(100)),
+            tags:  z.string().min(10).max(255).optional(),
         });
 
         // @ts-ignore
