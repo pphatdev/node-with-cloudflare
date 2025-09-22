@@ -138,7 +138,13 @@ export class ArticlesController {
             if (!success)
                 return c.json(response.error("Failed to fetch articles", 500), 500);
 
-            const data: Article[] = results;
+            const data: Article[] = results.map(item => ({
+                ...item,
+                tags: toJSONParse(item.tags),
+                meta_keywords: toJSONParse(item.meta_keywords),
+                is_featured: Boolean(item.is_featured),
+                published: Boolean(item.published)
+            }));
 
             return c.json(response.paginate(data, total, 200, "Request was successful"), 200);
 
@@ -218,8 +224,6 @@ export class ArticlesController {
                 .set({ status: 0, is_deleted: 1 })
                 .where(sql`${articles.id} = ${id}`)
                 .run();
-
-            console.log(success);
 
             if (!success) {
                 return c.json(response.error("Failed to delete article", 500), 500);
