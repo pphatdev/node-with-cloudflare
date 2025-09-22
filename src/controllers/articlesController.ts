@@ -52,10 +52,10 @@ export class ArticlesController {
             featured_image: z.string().url().optional(),
             meta_title: z.string().max(200).optional(),
             meta_description: z.string().max(500).optional(),
-            meta_keywords: z.string().min(10).max(255).optional(),
+            meta_keywords: z.string().min(5).max(255).optional(),
             is_featured: z.boolean().default(false),
             view_count: z.number().int().default(0),
-            tags:  z.string().min(10).max(255).optional(),
+            tags:  z.string().min(5).max(255).optional(),
         });
 
         // @ts-ignore
