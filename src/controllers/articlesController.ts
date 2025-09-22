@@ -27,6 +27,7 @@ export class ArticlesController {
 
         const params = {
             ...getParams,
+            view_count: Number(getParams?.view_count || 0),
             author_id: Number(getParams?.author_id || 0),
             category_id: Number(getParams?.category_id || 0),
             published: Boolean(getParams?.published || false),
