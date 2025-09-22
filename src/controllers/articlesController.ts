@@ -27,6 +27,10 @@ export class ArticlesController {
 
         const params = {
             ...getParams,
+            author_id: Number(getParams?.author_id || 0),
+            category_id: Number(getParams?.category_id || 0),
+            published: Boolean(getParams?.published || false),
+            is_featured: Boolean(getParams?.is_featured || false),
             created_date: new Date().toISOString(),
             updated_date: new Date().toISOString(),
             content: JSON.stringify(getParams, null, 2)
@@ -36,11 +40,7 @@ export class ArticlesController {
             title: z.string().min(2).max(200),
             slug: z.string().min(2).max(200)
                 .refine(
-                    async (value) => await isUnique(c, {
-                        table: articles,
-                        field: 'slug',
-                        value
-                    }),
+                    async (value) => await isUnique(c, { table: articles, field: 'slug', value }),
                     { message: 'Slug must be unique' }
                 ),
             content: z.string().min(10).max(10000),
