@@ -17,7 +17,7 @@
 		"@types/node": "^24.0.14",
 		"drizzle-kit": "^0.31.4",
 		"tsx": "^4.20.3",
-		"wrangler": "^4.14.4"
+		"wrangler": "^4.59.1"
 	},
 	"dependencies": {
 		"@hono/node-server": "^1.19.0",
