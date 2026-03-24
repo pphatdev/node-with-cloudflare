@@ -1,0 +1,20 @@
+import { AnyD1Database, drizzle, DrizzleD1Database } from "drizzle-orm/d1";
+import { MiddlewareHandler } from "hono";
+import type { HttpBindings } from "@hono/node-server";
+
+export interface Env {
+    DB: AnyD1Database;
+    CLOUDFLARE_DATABASE_ID: DrizzleD1Database;
+    bindings: HttpBindings;
+}
+
+const dbMiddleware: MiddlewareHandler = async (c, next) => {
+    if (!c.env.DB) {
+        console.error("DB binding is missing in environment.");
+        return c.text("Database not configured", 500);
+    }
+    c.set("db", drizzle(c.env.DB));
+    await next();
+};
+
+export default dbMiddleware;

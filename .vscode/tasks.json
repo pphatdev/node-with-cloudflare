@@ -1,0 +1,24 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "cleanup-old-files",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"cleanup.cjs"
+			],
+			"group": "none"
+		},
+		{
+			"label": "remove-cleanup-script",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"-e",
+				"require('fs').rmSync('cleanup.cjs',{force:true});console.log('removed cleanup.cjs')"
+			],
+			"group": "none"
+		}
+	]
+}

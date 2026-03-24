@@ -1,0 +1,43 @@
+interface Success {
+    status: number;
+    success: boolean;
+    message?: string;
+    version: string;
+    data: Array<Object> | Object;
+}
+
+interface ErrorResponse extends Omit<Success, 'data'> {}
+interface PaginatedResponse extends Success { total: number; }
+
+interface ResponseHandler {
+    success: (data: Array<Object> | Object, status?: number, message?: string) => Success;
+    error: (message: string, status?: number) => ErrorResponse;
+}
+
+export class Response implements ResponseHandler {
+    static readonly VERSION = "v1";
+
+    success(data: Array<Object> | Object, status: number = 200, message = "Request was successful"): Success {
+        return { status, version: Response.VERSION, message, success: true, data };
+    }
+
+    error(message: string | string[], status: number = 400): ErrorResponse {
+        return {
+            status,
+            success: false,
+            version: Response.VERSION,
+            message: Array.isArray(message) ? message[0] : message,
+        };
+    }
+
+    paginate(data: Array<Object> | Object, total: number, status: number = 200, message = "Request was successful"): PaginatedResponse {
+        return {
+            status,
+            version: Response.VERSION,
+            message,
+            success: true,
+            total,
+            data: Array.isArray(data) ? data : [data],
+        };
+    }
+}

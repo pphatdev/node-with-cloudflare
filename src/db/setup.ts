@@ -1,5 +1,5 @@
 import { Context } from "hono";
-import { Response } from "../libs/utils/response";
+import { Response } from "../shared/utils/response";
 import { createProjectsTable } from "./schemas/projects";
 import { createArticlesTable } from './schemas/articles';
 import { createCategoriesTable } from './schemas/categories';
