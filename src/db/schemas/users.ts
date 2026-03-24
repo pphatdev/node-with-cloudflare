@@ -29,27 +29,27 @@ export const createUsersTableQuery = `
     );
 `
 
-export const createUsersTable = (db: any) => {
-    return db.run(createUsersTableQuery)
-        .then(() => {
-            console.log("Users table created successfully");
-            return {
-                table_name: "users",
-                columns: [
-                    { name: "id", type: "INTEGER", nullable: false },
-                    { name: "name", type: "TEXT", nullable: false },
-                    { name: "email", type: "TEXT", nullable: false },
-                    { name: "password_hash", type: "TEXT", nullable: false },
-                    { name: "email_verified", type: "INTEGER", nullable: false },
-                    { name: "role", type: "TEXT", nullable: false },
-                    { name: "is_deleted", type: "INTEGER", nullable: false },
-                    { name: "status", type: "INTEGER", nullable: false },
-                    { name: "created_date", type: "TEXT", nullable: false },
-                    { name: "updated_date", type: "TEXT", nullable: false },
-                ]
-            }
-        })
-        .catch((error: any) => {
-            console.error("Error creating users table:", error);
-        });
+export const createUsersTable = async (db: any) => {
+    try {
+        await db.prepare(createUsersTableQuery).run();
+        console.log("Users table created successfully");
+        return {
+            table_name: "users",
+            columns: [
+                { name: "id", type: "INTEGER", nullable: false },
+                { name: "name", type: "TEXT", nullable: false },
+                { name: "email", type: "TEXT", nullable: false },
+                { name: "password_hash", type: "TEXT", nullable: false },
+                { name: "email_verified", type: "INTEGER", nullable: false },
+                { name: "role", type: "TEXT", nullable: false },
+                { name: "is_deleted", type: "INTEGER", nullable: false },
+                { name: "status", type: "INTEGER", nullable: false },
+                { name: "created_date", type: "TEXT", nullable: false },
+                { name: "updated_date", type: "TEXT", nullable: true },
+            ]
+        };
+    } catch (error: any) {
+        console.error("Error creating users table:", error);
+        throw new Error("Failed to create users table");
+    }
 }

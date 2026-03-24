@@ -1,5 +1,9 @@
 export const secret = "default_secret";
 
+export const getSecret = (c: any): string => {
+    return c?.env?.JWT_SECRET || secret;
+};
+
 export const AppConfig = {
     jwt: {
         secret,

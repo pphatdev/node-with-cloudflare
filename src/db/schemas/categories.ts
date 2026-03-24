@@ -32,28 +32,28 @@ export const createCategoriesTableQuery = `
     )
 `
 
-export const createCategoriesTable = (db: any) => {
-    return db.run(createCategoriesTableQuery)
-        .then(() => {
-            console.log("Categories table created successfully");
-            return {
-                table_name: "categories",
-                columns: [
-                    { name: "id", type: "INTEGER", nullable: false },
-                    { name: "name", type: "TEXT", nullable: false },
-                    { name: "slug", type: "TEXT", nullable: false },
-                    { name: "description", type: "TEXT", nullable: true },
-                    { name: "parent_id", type: "INTEGER", nullable: true },
-                    { name: "image", type: "TEXT", nullable: true },
-                    { name: "is_active", type: "INTEGER", nullable: false },
-                    { name: "is_deleted", type: "INTEGER", nullable: false },
-                    { name: "status", type: "INTEGER", nullable: false },
-                    { name: "created_date", type: "TEXT", nullable: false },
-                    { name: "updated_date", type: "TEXT", nullable: false },
-                ]
-            }
-        })
-        .catch((error: any) => {
-            console.error("Error creating categories table:", error);
-        });
+export const createCategoriesTable = async (db: any) => {
+    try {
+        await db.prepare(createCategoriesTableQuery).run();
+        console.log("Categories table created successfully");
+        return {
+            table_name: "categories",
+            columns: [
+                { name: "id", type: "INTEGER", nullable: false },
+                { name: "name", type: "TEXT", nullable: false },
+                { name: "slug", type: "TEXT", nullable: false },
+                { name: "description", type: "TEXT", nullable: true },
+                { name: "parent_id", type: "INTEGER", nullable: true },
+                { name: "image", type: "TEXT", nullable: true },
+                { name: "is_active", type: "INTEGER", nullable: true },
+                { name: "is_deleted", type: "INTEGER", nullable: false },
+                { name: "status", type: "INTEGER", nullable: false },
+                { name: "created_date", type: "TEXT", nullable: false },
+                { name: "updated_date", type: "TEXT", nullable: true },
+            ]
+        };
+    } catch (error: any) {
+        console.error("Error creating categories table:", error);
+        throw new Error("Failed to create categories table");
+    }
 }

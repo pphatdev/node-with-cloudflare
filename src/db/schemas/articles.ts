@@ -53,36 +53,38 @@ export const createArticlesTableQuery = `
     );
 `
 
-export const createArticlesTable = (db: any) => {
-    return db.run(createArticlesTableQuery)
-        .then(() => {
-            console.log("Articles table created successfully.");
-            return {
-                table_name: "articles",
-                columns: [
-                    { name: "id", type: "INTEGER", nullable: false },
-                    { name: "title", type: "TEXT", nullable: false },
-                    { name: "slug", type: "TEXT", nullable: false },
-                    { name: "content", type: "TEXT", nullable: false },
-                    { name: "excerpt", type: "TEXT", nullable: true },
-                    { name: "author_id", type: "INTEGER", nullable: false },
-                    { name: "category_id", type: "INTEGER", nullable: false },
-                    { name: "published", type: "INTEGER", nullable: false },
-                    { name: "published_date", type: "TEXT", nullable: false },
-                    { name: "featured_image", type: "TEXT", nullable: true },
-                    { name: "meta_title", type: "TEXT", nullable: true },
-                    { name: "meta_description", type: "TEXT", nullable: true },
-                    { name: "meta_keywords", type: "TEXT", nullable: true },
-                    { name: "is_featured", type: "INTEGER", nullable: false },
-                    { name: "view_count", type: "INTEGER", nullable: false },
-                    { name: "tags", type: "TEXT", nullable: true },
-                    { name: "created_date", type: "TEXT", nullable: false },
-                    { name: "updated_date", type: "TEXT", nullable: false },
-                ]
-            };
-        })
-        .catch((error: any) => {
-            console.error("Error creating articles table:", error);
-            throw new Error("Failed to create articles table");
-        });
+export const createArticlesTable = async (db: any) => {
+    try {
+        await db.prepare(createArticlesTableQuery).run();
+        console.log("Articles table created successfully.");
+        return {
+            table_name: "articles",
+            columns: [
+                { name: "id", type: "INTEGER", nullable: false },
+                { name: "title", type: "TEXT", nullable: false },
+                { name: "slug", type: "TEXT", nullable: false },
+                { name: "content", type: "TEXT", nullable: false },
+                { name: "excerpt", type: "TEXT", nullable: true },
+                { name: "author_id", type: "INTEGER", nullable: true },
+                { name: "category_id", type: "INTEGER", nullable: true },
+                { name: "published", type: "INTEGER", nullable: false },
+                { name: "published_date", type: "TEXT", nullable: true },
+                { name: "featured_image", type: "TEXT", nullable: true },
+                { name: "meta_title", type: "TEXT", nullable: true },
+                { name: "meta_description", type: "TEXT", nullable: true },
+                { name: "meta_keywords", type: "TEXT", nullable: true },
+                { name: "is_featured", type: "INTEGER", nullable: true },
+                { name: "view_count", type: "INTEGER", nullable: true },
+                { name: "tags", type: "TEXT", nullable: true },
+                { name: "moderators", type: "TEXT", nullable: true },
+                { name: "is_deleted", type: "INTEGER", nullable: false },
+                { name: "status", type: "INTEGER", nullable: false },
+                { name: "created_date", type: "TEXT", nullable: false },
+                { name: "updated_date", type: "TEXT", nullable: true },
+            ]
+        };
+    } catch (error: any) {
+        console.error("Error creating articles table:", error);
+        throw new Error("Failed to create articles table");
+    }
 }

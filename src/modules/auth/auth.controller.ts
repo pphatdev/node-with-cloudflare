@@ -2,7 +2,7 @@ import { Context } from "hono";
 import { z } from "zod";
 import { getConnInfo } from "hono/cloudflare-workers";
 import { Response } from "../../shared/utils/response";
-import { secret } from "../../config";
+import { getSecret } from "../../config";
 import { AuthService } from "./auth.service";
 import type { User } from "../../shared/types/users";
 
@@ -51,7 +51,7 @@ export class AuthController {
 
             const token = await AuthService.generateToken(
                 { id: user.id, username: user.name, userAgent, ipAddress },
-                secret
+                getSecret(c)
             );
             await AuthService.createSession(db, { userId: user.id, token, userAgent, ipAddress, expiresAt });
 
@@ -99,7 +99,7 @@ export class AuthController {
             if (!session) {
                 return c.json({ status: 401, success: false, version: Response.VERSION, message: "❌ Token has been revoked. Please log in again." }, 401);
             }
-            if (session.expires_at && new Date(session.expires_at) < new Date()) {
+            if (session.expires_date && new Date(session.expires_date) < new Date()) {
                 return c.json({ status: 401, success: false, version: Response.VERSION, message: "❌ Token is expired. Please log in again." }, 401);
             }
             return c.json({ status: 200, success: true, version: Response.VERSION, message: "✅ Token is valid" }, 200);
@@ -139,7 +139,7 @@ export class AuthController {
                 username = user?.name;
             }
 
-            const newToken = await AuthService.generateToken({ id: userId, username, userAgent, ipAddress }, secret);
+            const newToken = await AuthService.generateToken({ id: userId, username, userAgent, ipAddress }, getSecret(c));
             const expiresAt = new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString();
             const ok = await AuthService.refreshSession(db, session.id, newToken, expiresAt);
             if (!ok) return c.json(response.error("Failed to refresh token", 500), 500);

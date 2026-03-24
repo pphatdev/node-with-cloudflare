@@ -25,24 +25,24 @@ export const createPasswordResetTokensTableQuery = `
     );
 `
 
-export const createPasswordResetTokensTable = (db: any) => {
-    return db.run(createPasswordResetTokensTableQuery)
-    .then(()=> {
+export const createPasswordResetTokensTable = async (db: any) => {
+    try {
+        await db.prepare(createPasswordResetTokensTableQuery).run();
         console.log("Password reset tokens table created successfully");
         return {
             table_name: "password_reset_tokens",
             columns: [
                 { name: "id", type: "TEXT", nullable: false },
                 { name: "user_id", type: "INTEGER", nullable: false },
-                { name: "expires_date", type: "TEXT", nullable: false },
+                { name: "expires_date", type: "TEXT", nullable: true },
                 { name: "is_deleted", type: "INTEGER", nullable: false },
                 { name: "status", type: "INTEGER", nullable: false },
                 { name: "created_date", type: "TEXT", nullable: false },
-                { name: "updated_date", type: "TEXT", nullable: false },
+                { name: "updated_date", type: "TEXT", nullable: true },
             ]
-        }
-    })
-    .catch((error: any) => {
+        };
+    } catch (error: any) {
         console.error("Error creating password_reset_tokens table:", error);
-    });
+        throw new Error("Failed to create password_reset_tokens table");
+    }
 }

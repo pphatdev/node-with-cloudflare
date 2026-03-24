@@ -1,7 +1,7 @@
 import { Context, Next } from "hono";
 import { jwtVerify } from "jose";
 import { sql } from "drizzle-orm";
-import { secret } from "../config";
+import { secret, getSecret } from "../config";
 import { Response } from "../shared/utils/response";
 import { sessions } from "../db/schemas/sessions";
 
@@ -16,7 +16,7 @@ export const authorize = async (c: Context, next: Next) => {
     const token = authHeader.split(" ")[1];
 
     try {
-        const { payload } = await jwtVerify(token, new TextEncoder().encode(secret));
+        const { payload } = await jwtVerify(token, new TextEncoder().encode(getSecret(c)));
         c.set("user", payload);
 
         const db = c.get("db");

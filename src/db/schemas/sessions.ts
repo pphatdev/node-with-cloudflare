@@ -2,7 +2,7 @@ import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
 import { users } from './users';
 
 export const sessions = sqliteTable('sessions', {
-    id: text('id').primaryKey(),
+    id: integer('id').primaryKey({ autoIncrement: true }),
     user_id: integer('user_id').notNull().references(() => users.id),
     expires_date: text("expires_date").$defaultFn(() => new Date().toISOString()),
     token: text('token').notNull().unique(),
@@ -30,27 +30,27 @@ export const createSessionsTableQuery = `
     );
 `
 
-export const createSessionsTable = (db: any) => {
-    return db.run(createSessionsTableQuery)
-        .then(() => {
-            console.log("Sessions table created successfully");
-            return {
-                table_name: "sessions",
-                columns: [
-                    { name: 'id', type: 'TEXT', nullable: false },
-                    { name: 'user_id', type: 'INTEGER', nullable: false },
-                    { name: 'expires_date', type: 'TEXT', nullable: false },
-                    { name: 'token', type: 'TEXT', nullable: false },
-                    { name: 'devices', type: 'TEXT', nullable: true },
-                    { name: 'ip_address', type: 'TEXT', nullable: true },
-                    { name: 'is_deleted', type: 'INTEGER', nullable: false },
-                    { name: 'status', type: 'INTEGER', nullable: false },
-                    { name: 'created_date', type: 'TEXT', nullable: false },
-                    { name: 'updated_date', type: 'TEXT', nullable: true }
-                ]
-            }
-        })
-        .catch((error: any) => {
-            console.error("Error creating sessions table:", error);
-        });
+export const createSessionsTable = async (db: any) => {
+    try {
+        await db.prepare(createSessionsTableQuery).run();
+        console.log("Sessions table created successfully");
+        return {
+            table_name: "sessions",
+            columns: [
+                { name: 'id', type: 'INTEGER', nullable: false },
+                { name: 'user_id', type: 'INTEGER', nullable: false },
+                { name: 'expires_date', type: 'TEXT', nullable: true },
+                { name: 'token', type: 'TEXT', nullable: false },
+                { name: 'devices', type: 'TEXT', nullable: true },
+                { name: 'ip_address', type: 'TEXT', nullable: true },
+                { name: 'is_deleted', type: 'INTEGER', nullable: false },
+                { name: 'status', type: 'INTEGER', nullable: false },
+                { name: 'created_date', type: 'TEXT', nullable: false },
+                { name: 'updated_date', type: 'TEXT', nullable: true }
+            ]
+        };
+    } catch (error: any) {
+        console.error("Error creating sessions table:", error);
+        throw new Error("Failed to create sessions table");
+    }
 }

@@ -8,16 +8,18 @@ import { createUsersTable } from "./schemas/users";
 import { createPasswordResetTokensTable } from "./schemas/password-reset-tokens";
 
 const response = new Response();
-const tables = [];
+const tables: Record<string, unknown>[] = [];
 
 export const initialize = async (c: Context) => {
     try {
-        const db = await c.get("db");
+        const db = c.env.DB;
+        if (!db?.prepare) throw new Error("D1 database binding is unavailable");
+
+        const usersTable = await createUsersTable(db);
+        const categoriesTable = await createCategoriesTable(db);
         const projectsTable = await createProjectsTable(db);
         const articlesTable = await createArticlesTable(db);
-        const categoriesTable = await createCategoriesTable(db);
         const sessionsTable = await createSessionsTable(db);
-        const usersTable = await createUsersTable(db);
         const passwordResetTokensTable = await createPasswordResetTokensTable(db);
 
         tables.push(

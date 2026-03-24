@@ -79,7 +79,7 @@ export class AuthService {
         const now = new Date().toISOString();
         const { success } = await db
             .update(sessions)
-            .set({ token: newToken, updated_date: now, expires_at: expiresAt })
+            .set({ token: newToken, updated_date: now, expires_date: expiresAt })
             .where(sql`${sessions.id} = ${sessionId}`)
             .run();
         return success;
