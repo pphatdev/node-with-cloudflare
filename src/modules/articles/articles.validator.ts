@@ -5,17 +5,15 @@ import { isUnique } from "../../shared/helpers/db.helper";
 import { articles } from "../../db/schemas/articles";
 import { users } from "../../db/schemas/users";
 import { categories } from "../../db/schemas/categories";
+import { parseBody } from "../../shared/utils/json";
 
 const response = new Response();
 
 export const validateArticle = async (c: Context, next: () => Promise<void>): Promise<void> => {
     const db = c.get("db");
-    const raw = {
-        ...await c.req.parseBody(),
-        ...await c.req.raw.json(),
-    };
+    const raw = await parseBody(c);
 
-    const params = {
+    const params: Record<string, any> = {
         ...raw,
         view_count: Number(raw?.view_count || 0),
         author_id: Number(raw?.author_id || 0),

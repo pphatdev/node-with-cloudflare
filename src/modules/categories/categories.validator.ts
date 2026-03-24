@@ -3,14 +3,14 @@ import { Context } from "hono";
 import { Response } from "../../shared/utils/response";
 import { isUnique } from "../../shared/helpers/db.helper";
 import { categories } from "../../db/schemas/categories";
+import { parseBody } from "../../shared/utils/json";
 
 const response = new Response();
 
 export const validateCategory = async (c: Context, next: () => Promise<void>): Promise<void> => {
     const db = c.get("db");
-    const params = {
-        ...await c.req.parseBody(),
-        ...await c.req.raw.json(),
+    const params: Record<string, any> = {
+        ...await parseBody(c),
         created_date: new Date().toISOString(),
         updated_date: new Date().toISOString(),
     };

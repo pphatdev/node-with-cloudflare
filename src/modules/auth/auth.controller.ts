@@ -4,16 +4,14 @@ import { getConnInfo } from "hono/cloudflare-workers";
 import { Response } from "../../shared/utils/response";
 import { getSecret } from "../../config";
 import { AuthService } from "./auth.service";
+import { parseBody } from "../../shared/utils/json";
 import type { User } from "../../shared/types/users";
 
 const response = new Response();
 
 export class AuthController {
     static async login(c: Context): Promise<any> {
-        const params = {
-            ...await c.req.parseBody(),
-            ...await c.req.raw.json(),
-        };
+        const params = await parseBody(c);
 
         const schema = z.object({
             email: z.string().email(),

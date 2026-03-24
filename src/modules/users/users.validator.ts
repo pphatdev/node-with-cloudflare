@@ -1,13 +1,13 @@
 import { z } from "zod";
 import { Context } from "hono";
 import { Response } from "../../shared/utils/response";
+import { parseBody } from "../../shared/utils/json";
 
 const response = new Response();
 
 export const validateCreateUser = async (c: Context, next: () => Promise<void>): Promise<void> => {
     const params = {
-        ...await c.req.parseBody(),
-        ...await c.req.raw.json(),
+        ...await parseBody(c),
         created_date: new Date().toISOString(),
         updated_date: new Date().toISOString(),
     };
