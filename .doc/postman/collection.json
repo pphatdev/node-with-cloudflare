@@ -7,8 +7,8 @@
 	},
 	"variable": [
 		{
-			"key": "baseUrl",
-			"value": "http://localhost:8787",
+			"key": "url",
+			"value": "https://api.pphatdev.workers.dev",
 			"type": "string"
 		},
 		{
@@ -37,8 +37,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/",
+							"host": ["{{url}}"],
 							"path": [""]
 						}
 					}
@@ -49,8 +49,8 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/setup",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/setup",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "setup"]
 						}
 					}
@@ -76,8 +76,8 @@
 							"raw": "{\n\t\"name\": \"John Doe\",\n\t\"email\": \"john@example.com\",\n\t\"password\": \"password123\",\n\t\"role\": \"user\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/auth/register",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/auth/register",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "auth", "register"]
 						}
 					}
@@ -112,8 +112,8 @@
 							"raw": "{\n\t\"email\": \"john@example.com\",\n\t\"password\": \"password123\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/auth/login",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/auth/login",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "auth", "login"]
 						}
 					}
@@ -124,8 +124,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/auth/me",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/auth/me",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "auth", "me"]
 						}
 					}
@@ -136,8 +136,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/auth/verify",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/auth/verify",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "auth", "verify"]
 						}
 					}
@@ -162,8 +162,8 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/auth/refresh",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/auth/refresh",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "auth", "refresh"]
 						}
 					}
@@ -174,8 +174,8 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/auth/logout",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/auth/logout",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "auth", "logout"]
 						}
 					}
@@ -191,8 +191,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/users?page=1&limit=15",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/users?page=1&limit=15",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "users"],
 							"query": [
 								{ "key": "page", "value": "1" },
@@ -211,8 +211,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/users/1",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/users/1",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "users", "1"]
 						}
 					}
@@ -232,8 +232,8 @@
 							"raw": "{\n\t\"name\": \"Jane Smith\",\n\t\"email\": \"jane@example.com\",\n\t\"password\": \"password123\",\n\t\"role\": \"user\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/users",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/users",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "users"]
 						}
 					}
@@ -253,8 +253,8 @@
 							"raw": "{\n\t\"name\": \"Jane Updated\",\n\t\"email\": \"jane.updated@example.com\",\n\t\"password\": \"newpassword123\",\n\t\"role\": \"admin\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/users/1",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/users/1",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "users", "1"]
 						}
 					}
@@ -265,8 +265,8 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/users/1",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/users/1",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "users", "1"]
 						}
 					}
@@ -283,8 +283,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/categories?page=1&limit=15",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/categories?page=1&limit=15",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "categories"],
 							"query": [
 								{ "key": "page", "value": "1" },
@@ -304,8 +304,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/categories/1",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/categories/1",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "categories", "1"]
 						}
 					}
@@ -325,8 +325,8 @@
 							"raw": "{\n\t\"name\": \"Technology\",\n\t\"slug\": \"technology\",\n\t\"description\": \"Articles about technology\",\n\t\"parent_id\": null,\n\t\"image\": \"https://example.com/tech.jpg\",\n\t\"is_active\": true,\n\t\"status\": true\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/categories",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/categories",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "categories"]
 						}
 					}
@@ -346,8 +346,8 @@
 							"raw": "{\n\t\"name\": \"Tech & Science\",\n\t\"slug\": \"tech-science\",\n\t\"description\": \"Updated description\",\n\t\"is_active\": true,\n\t\"status\": true\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/categories/1",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/categories/1",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "categories", "1"]
 						}
 					}
@@ -358,8 +358,8 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/categories/1",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/categories/1",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "categories", "1"]
 						}
 					}
@@ -376,8 +376,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/articles?page=1&limit=15",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/articles?page=1&limit=15",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "articles"],
 							"query": [
 								{ "key": "page", "value": "1" },
@@ -397,8 +397,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/articles/my-first-article",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/articles/my-first-article",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "articles", "my-first-article"]
 						}
 					}
@@ -418,8 +418,8 @@
 							"raw": "{\n\t\"title\": \"My First Article\",\n\t\"slug\": \"my-first-article\",\n\t\"content\": \"This is the full content of my first article. It needs to be at least 10 characters.\",\n\t\"excerpt\": \"A brief summary of the article content here.\",\n\t\"author_id\": 1,\n\t\"category_id\": 1,\n\t\"published\": true,\n\t\"published_date\": \"2026-03-24\",\n\t\"featured_image\": \"https://example.com/image.jpg\",\n\t\"meta_title\": \"My First Article - PPhat\",\n\t\"meta_description\": \"Read about my first article on PPhat blog\",\n\t\"meta_keywords\": \"article, blog, first\",\n\t\"is_featured\": false,\n\t\"view_count\": 0,\n\t\"tags\": \"hono, cloudflare, tutorial\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/articles",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/articles",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "articles"]
 						}
 					}
@@ -439,8 +439,8 @@
 							"raw": "{\n\t\"title\": \"My Updated Article\",\n\t\"slug\": \"my-updated-article\",\n\t\"content\": \"This is the updated content of the article with more details.\",\n\t\"excerpt\": \"Updated summary of the article.\",\n\t\"author_id\": 1,\n\t\"category_id\": 1,\n\t\"published\": true,\n\t\"is_featured\": true\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/articles/1",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/articles/1",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "articles", "1"]
 						}
 					}
@@ -451,8 +451,8 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/articles/1",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/articles/1",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "articles", "1"]
 						}
 					}
@@ -469,8 +469,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/projects?page=1&limit=15",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/projects?page=1&limit=15",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "projects"],
 							"query": [
 								{ "key": "page", "value": "1" },
@@ -490,8 +490,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/projects/1",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/projects/1",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "projects", "1"]
 						}
 					}
@@ -511,8 +511,8 @@
 							"raw": "{\n\t\"name\": \"PPhat API\",\n\t\"description\": \"A modern REST API built with Hono framework, Drizzle ORM, and Cloudflare Workers.\",\n\t\"image\": \"https://example.com/project.jpg\",\n\t\"published\": true,\n\t\"tags\": [\"api\", \"cloudflare\", \"hono\"],\n\t\"source\": [\"https://github.com/pphatdev/node-with-cloudflare\"],\n\t\"authors\": [\"PPhat\"],\n\t\"languages\": [\"TypeScript\", \"SQL\"]\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/projects",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/projects",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "projects"]
 						}
 					}
@@ -532,8 +532,8 @@
 							"raw": "{\n\t\"name\": \"PPhat API v2\",\n\t\"description\": \"Updated project description with new features and improvements.\",\n\t\"image\": \"https://example.com/project-v2.jpg\",\n\t\"published\": true,\n\t\"tags\": [\"api\", \"cloudflare\", \"hono\", \"drizzle\"],\n\t\"source\": [\"https://github.com/pphatdev/node-with-cloudflare\"],\n\t\"authors\": [\"PPhat\", \"Contributors\"],\n\t\"languages\": [\"TypeScript\", \"SQL\", \"JavaScript\"]\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/projects/1",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/projects/1",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "projects", "1"]
 						}
 					}
@@ -544,8 +544,8 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/projects/1",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/projects/1",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "projects", "1"]
 						}
 					}
@@ -561,8 +561,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/sessions?page=1&limit=15",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/sessions?page=1&limit=15",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "sessions"],
 							"query": [
 								{ "key": "page", "value": "1" },
@@ -581,8 +581,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/sessions/1",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/sessions/1",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "sessions", "1"]
 						}
 					}
@@ -602,8 +602,8 @@
 							"raw": "{\n\t\"user_id\": 1,\n\t\"expires_date\": \"2026-04-24T00:00:00.000Z\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/sessions",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/sessions",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "sessions"]
 						}
 					}
@@ -623,8 +623,8 @@
 							"raw": "{\n\t\"user_id\": 1,\n\t\"expires_date\": \"2026-05-24T00:00:00.000Z\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/sessions/1",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/sessions/1",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "sessions", "1"]
 						}
 					}
@@ -635,8 +635,8 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/v1/api/sessions/1",
-							"host": ["{{baseUrl}}"],
+							"raw": "{{url}}/v1/api/sessions/1",
+							"host": ["{{url}}"],
 							"path": ["v1", "api", "sessions", "1"]
 						}
 					}
