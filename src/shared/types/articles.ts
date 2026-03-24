@@ -16,6 +16,7 @@ export type Article = {
     is_featured: boolean;
     view_count: number;
     tags: string[] | string;
+    moderators: number[] | string | null;
     created_date: string;
     updated_date: string;
 };

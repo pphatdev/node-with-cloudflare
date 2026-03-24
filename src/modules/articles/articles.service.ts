@@ -27,13 +27,13 @@ export class ArticlesService {
 
     static async findAll(db: any, params: ArticleQueryParams): Promise<{ data: Article[]; total: number }> {
         const { search = "", status = true, is_deleted = false, page, limit, sort } = params;
-        const { id, title, slug, content, excerpt, published, published_date, featured_image, meta_title, meta_description, meta_keywords, is_featured, view_count, tags, is_deleted: _d, status: _s, created_date, updated_date } = articles;
+        const { id, title, slug, content, excerpt, published, published_date, featured_image, meta_title, meta_description, meta_keywords, is_featured, view_count, tags, moderators, is_deleted: _d, status: _s, created_date, updated_date } = articles;
 
         const where = sql`${articles.status} = ${status ? 1 : 0} AND ${articles.is_deleted} = ${is_deleted ? 1 : 0} AND ${articles.title} LIKE ${`%${search}%`}`;
 
         const total = await getTotal(db, articles, where);
         const { results, success } = await paginate(db, {
-            select: { id, title, slug, content, excerpt, published, published_date, featured_image, meta_title, meta_description, meta_keywords, is_featured, view_count, tags, is_deleted: _d, status: _s, created_date, updated_date },
+            select: { id, title, slug, content, excerpt, published, published_date, featured_image, meta_title, meta_description, meta_keywords, is_featured, view_count, tags, moderators, is_deleted: _d, status: _s, created_date, updated_date },
             table: articles,
             where, page, limit, sort,
         });
@@ -43,6 +43,7 @@ export class ArticlesService {
         const data: Article[] = results.map((item: any) => ({
             ...item,
             tags: toJSONParse(item.tags),
+            moderators: toJSONParse(item.moderators),
             meta_keywords: toJSONParse(item.meta_keywords),
             is_featured: Boolean(item.is_featured),
             published: Boolean(item.published),

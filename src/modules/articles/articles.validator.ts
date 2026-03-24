@@ -45,6 +45,7 @@ export const validateArticle = async (c: Context, next: () => Promise<void>): Pr
         is_featured: z.boolean().default(false),
         view_count: z.number().int().default(0),
         tags: z.string().min(5).max(255).optional(),
+        moderators: z.string().optional(),
     });
 
     // @ts-ignore
@@ -78,6 +79,7 @@ export const validateArticle = async (c: Context, next: () => Promise<void>): Pr
         ...params,
         ...c.get("validated") || {},
         tags: JSON.stringify(params.tags),
+        moderators: JSON.stringify(params.moderators),
         meta_keywords: JSON.stringify(params.meta_keywords),
     });
     await next();

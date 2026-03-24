@@ -29,6 +29,13 @@
       "when": 1756279701373,
       "tag": "0003_dizzy_thunderball",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1711267200000,
+      "tag": "0004_add_moderators_to_articles",
+      "breakpoints": true
     }
   ]
 }
