@@ -18,7 +18,7 @@ export const AppConfig = {
             "http://127.0.0.1:5173",
             "http://127.0.0.1:8080",
         ],
-        allowedDomains: [".pphat.top", ".pphat.pro"],
+        allowedDomains: [".pphat.top", ".pphat.pro", ".pphat.me"],
     },
 };
 
