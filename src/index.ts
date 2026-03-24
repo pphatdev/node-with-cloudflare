@@ -15,7 +15,7 @@ import usersRoutes from "./modules/users/users.routes";
 const app = new Hono();
 
 // Homepage
-app.get("/", (c) => c.text("Welcome to the homepage"));
+app.get("/", (c) => c.json({ message: "Welcome to the homepage" }));
 
 // API v1
 const api = new Hono();

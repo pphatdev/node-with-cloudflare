@@ -10,7 +10,8 @@
         {
             "binding": "DB",
             "database_name": "pphat",
-            "database_id": "effc222b-f49a-42ea-8beb-cbaab0cf19ec"
+            "database_id": "effc222b-f49a-42ea-8beb-cbaab0cf19ec",
+            "migrations_dir": "drizzle"
         }
     ]
 }
