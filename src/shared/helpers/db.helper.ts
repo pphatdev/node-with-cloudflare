@@ -26,16 +26,19 @@ export async function getTotal(db: any, table: any, where: any): Promise<number>
 }
 
 export async function paginate(db: any, params: PaginationParams): Promise<PaginationResponse> {
-    const { select, table, where, page = 1, limit = 10, sort = "id" } = params;
-    const offset = (page - 1) * limit;
-    const { results, success } = await db
-        .select(select)
-        .from(table)
-        .where(where)
-        .orderBy(table[sort])
-        .limit(limit)
-        .offset(offset)
-        .run();
+	const { select, table, where, page = 1, limit = 10, sort = "id" } = params;
+	const offset = (page - 1) * limit;
+	let query = db
+		.select(select)
+		.from(table)
+		.where(where)
+		.orderBy(table[sort]);
+
+	if (limit !== -1) {
+		query = query.limit(limit).offset(offset);
+	}
+
+	const { results, success } = await query.run();
     return { results, success };
 }
 
